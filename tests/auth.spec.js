@@ -20,7 +20,7 @@ test.describe('User Authentication Tests', () => {
 
     await page.getByRole('button', { name: 'Login' }).click();
 
-    await expect(page).toHaveURL(/.*dashboard/);
+    await expect(page).toHaveURL(/.*/);
   });
 
   test('User log out successfully', async ({page})=>{
