@@ -3,29 +3,39 @@ import { Auth } from '../pages/auth'
 require('dotenv').config();
 
 test.describe('User Authentication Test', ()=>{
-    test('User login test',async ({page})=>{
+    let auth;
 
-        const auth =  new Auth(page);
+    test.beforeEach('Navigate to Home Page ',async({page})=>{
+        auth =  new Auth(page);
 
         // Navigate to the home page
         await auth.goHomepage();
+    });
 
-        // Store the URL before login
-        // const beforeLoginURL = await auth.getCurrentUrl();
-
+    test('User login successful',async ({page})=>{
         
+        // Perform login with valid credentials
         await auth.login(process.env.USERNAME, process.env.PASSWORD);
 
         //Wait for the page to handle login 
         await page.waitForTimeout(2000);
 
-        // Store the URL after login
-        // const afterLoginURL = await auth.getCurrentUrl();
-
-        // Assert that the URLs are the same before and after login
-        // expect(beforeLoginURL).toBe(afterLoginURL);
-
         const isSuccessful = await auth.isLoginSuccessful();
         expect(isSuccessful).toBe(true);
+    });
+
+    test('User login fail',async({page})=>{
+        
+        // Perform login with invalid credentials
+        await auth.login('david2020g@gmail.com','dav1234#')
+        
+        // Wait for the page to handle login
+        await page.waitForTimeout(2000);
+
+        const isSuccessful = await auth.isLoginSuccessful();
+        const isErrorMessageVisible = await auth.isErrorMessageVisible();
+
+        expect(isSuccessful).toBe(false);
+        expect(isErrorMessageVisible).toBe(true);
     })
 })

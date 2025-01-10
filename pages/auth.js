@@ -9,6 +9,7 @@ exports.Auth =  class Auth {
     this.login_button = page.getByRole("button", { name: "Login" });
     this.profile_link = page.getByRole('link', { name: 'Welcome David ' });
     this.logoutButton = page.getByRole('link', { name: ' Logout' });
+    this.login_error_message = page.getByText('These credentials do not match our records.', { exact: false });
   }
 
   async goHomepage() {
@@ -27,9 +28,11 @@ exports.Auth =  class Auth {
   }
 
   async isLoginSuccessful(){
-    await this.profile_link.click();
-    await this.page.waitForTimeout(2000);
+    return this.profile_link.isVisible();
 
-    return this.logoutButton.isVisible();
+  }
+
+  async isErrorMessageVisible(){
+    return this.login_error_message.isVisible();
   }
 }
