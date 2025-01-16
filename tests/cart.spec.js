@@ -1,5 +1,6 @@
 import {test,expect} from "@playwright/test"
 import { Cart } from '../pages/cart'
+require('dotenv').config();
 
 test.describe('Cart testing ', ()=>{
     test('Product add to cart test', async({page})=>{
@@ -8,7 +9,7 @@ test.describe('Cart testing ', ()=>{
 
         await cart.gotoHomePage()
 
-        await cart.addToCart('dauth2026grg@gmail.com', 'D@vid1234#');
+        await cart.addToCart(process.env.EMAIL, process.env.PASSWORD);
 
         await cart.closePage();
 

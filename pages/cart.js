@@ -16,7 +16,7 @@ exports.Cart = class Cart {
     }
   
     async gotoHomePage() {
-      await this.page.goto("https://www.mallowco.com.au/");
+      await this.page.goto(process.env.TEST_URL)
     }
   
     async closePage() {
