@@ -13,7 +13,7 @@ exports.Auth =  class Auth {
   }
 
   async goHomepage() {
-    await this.page.goto("https://www.mallowco.com.au/");
+    await this.page.goto(process.env.TEST_URL);
   }
 
   async login(username, password) {
