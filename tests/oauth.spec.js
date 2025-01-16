@@ -15,7 +15,7 @@ test.describe('User Authentication Test', ()=>{
     test('User login successful',async ({page})=>{
         
         // Perform login with valid credentials
-        await auth.login(process.env.USERNAME, process.env.PASSWORD);
+        await auth.login(process.env.EMAIL, process.env.PASSWORD);
 
         //Wait for the page to handle login 
         await page.waitForTimeout(2000);
