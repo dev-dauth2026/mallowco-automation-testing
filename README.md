@@ -28,7 +28,25 @@ This repository contains **Playwright**-based automated tests for Mallowco’s w
 
 ## Repository Structure
 
-mallowco-automation-testing/ ├── .github/ ├── pages/ │ ├── CartPage.js │ ├── CheckoutPage.js │ ├── LoginPage.js │ ├── SignupPage.js │ └── ... ├── tests/ │ ├── cart.spec.js │ ├── checkout.spec.js │ ├── filter.spec.js │ ├── oauth.spec.js │ ├── search.spec.js │ └── signup.spec.js ├── .gitignore ├── package-lock.json ├── package.json └── playwright.config.ts
+mallowco-automation-testing/ 
+├── .github/ 
+├── pages/ │ 
+   ├── CartPage.js │ 
+   ├── CheckoutPage.js │ 
+   ├── LoginPage.js │ 
+   ├── SignupPage.js │ 
+   └── ... 
+├── tests/ │ 
+   ├── cart.spec.js │ 
+   ├── checkout.spec.js │ 
+   ├── filter.spec.js │ 
+   ├── oauth.spec.js │ 
+   ├── search.spec.js │ 
+   └── signup.spec.js 
+├── .gitignore 
+├── package-lock.json 
+├── package.json 
+└── playwright.config.ts
 
 markdown
 Copy
