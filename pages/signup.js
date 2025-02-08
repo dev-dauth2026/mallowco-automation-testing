@@ -1,4 +1,4 @@
-exports.Signup = class SignUp {
+exports.Signup = class Signup {
 
     constructor(page){
 

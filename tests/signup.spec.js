@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { Signup } from '../pages/signup';
+import { Shop } from '../pages/shop';
 require('dotenv').config();
 
 test.describe('User Sign up Test',()=>{

@@ -1,5 +1,5 @@
 import {test,expect} from '@playwright/test'
-import { Auth } from '../pages/auth'
+import { Auth } from '../pages/Login'
 require('dotenv').config();
 
 test.describe('User Authentication Test', ()=>{

@@ -1,7 +1,7 @@
 import { test } from '@playwright/test';
-import { CategoriesPage } from '../pages/categoriesPage';
-import { BrandsPage } from '../pages/brands';
-import { CountriesPage } from '../pages/countries';
+import { BrandsPage } from '../pages/components/shop_components/brands';
+import { CountriesPage } from '../pages/components/countries';
+import { CategoriesPage } from '../pages/components/categoriesPage';
 
 test.describe('Filter Functionality Tests', () => {
   test('Filter Categories', async ({ page }) => {
@@ -39,7 +39,7 @@ test.describe('Filter Functionality Tests', () => {
 
     // Toggle countries
     await countriesPage.viewAllCountries();
-    
+
     await countriesPage.toggleCountry('australia');
     await countriesPage.toggleCountry('china');
     await countriesPage.toggleCountry('india');
