@@ -1,6 +1,10 @@
-exports.SearchPage = class SearchPage {
+import { BasePage } from "./BasePage";
+
+export class SearchPage extends BasePage {
     constructor(page) {
-      this.page = page;
+      super(page);
+
+      //Locators
       this.searchBox = page.getByPlaceholder('Search Keywords to search...');
       this.searchButton = page.getByLabel('Search Products', { exact: true });
       this.categories_link = page.getByRole('banner').getByText('Categories')
@@ -13,10 +17,9 @@ exports.SearchPage = class SearchPage {
         dailyNeeds: page.getByRole('link', { name: 'Daily Needs & Others' }),
         sugarTea: page.getByRole('link', { name: 'Sugar & Tea' }),
       };
-    }
-  
-    async gotoHomePage() {
-      await this.page.goto('https://mallowco.com.au/');
+      this.product = page.locator('.product .product-name h3');
+      this.productLink = page.locator('.product .product-name a');
+      this.productDetailTitle = page.locator('.product-title h2');
     }
   
     async searchProduct(keyword) {
@@ -34,7 +37,10 @@ exports.SearchPage = class SearchPage {
   
     async searchAndSelectFirstProduct(keyword) {
       await this.searchProduct(keyword);
-      await this.page.locator('.product-header > a').first().click();
+      const selectedProduct = await this.product.first().textContent();
+      await this.productLink.first().click();
+
+      return selectedProduct;
     }
   };
   
