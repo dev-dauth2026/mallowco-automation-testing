@@ -18,9 +18,7 @@ test.describe('Search Functionality Tests', () => {
 
     // Perform search and select the first product and check the detail page title is same or not
     const selectedProduct = await searchPage.searchAndSelectFirstProduct('facewash');
-    console.log('Console Log***');
-    console.log('Selected product**', selectedProduct);
-    console.log('Expected',await searchPage.productDetailTitle.textContent())
+
     expect(await searchPage.productDetailTitle.textContent()).toContain(selectedProduct)
    
   });
@@ -39,8 +37,6 @@ test.describe('Search Functionality Tests', () => {
     // console.log('search text first',await page.getByText(/men\s*\w*\s*face\s*wash/i).first().textContent());
 
     const matchesCount = await page.getByText(/men\s*\w*\s*face\s*wash/i).count();
-
-    console.log('match count', matchesCount);
 
     // Now do a numeric comparison:
     expect(matchesCount).toBeGreaterThan(0);
