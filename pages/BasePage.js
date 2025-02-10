@@ -29,6 +29,30 @@ export class BasePage {
             aboutUs: 'text=About Us',
             contactUs: 'text=Contact Us'
         };
+
+        // Cookies privacy
+        this.cookiesCustomise = 'button.cky-btn-customize';
+        this.cookiesReject = 'button.cky-btn-reject';
+        this.cookiesAccept = 'button.cky-btn-accept';
+        
+    }
+
+    // Go to Home Page
+    async gotoHomePage() {
+        await this.page.goto(process.env.TEST_URL);
+      }
+
+    // Cookies Privacy selection
+    async cookiesAccepted(){
+        await this.page.click(this.cookiesAccept);
+    }
+
+    async cookiesRejected(){
+        await this.page.click(this.cookiesReject);
+    }
+
+    async cookiesCustomised(){
+        await this.page.click(this.cookiesCustomise);
     }
 
     // Navigation Methods
