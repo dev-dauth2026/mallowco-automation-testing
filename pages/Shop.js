@@ -1,6 +1,9 @@
-exports.Shop = class Shop{
+import { BasePage } from "./BasePage";
+
+export class Shop extends BasePage{
     constructor(page){
-        this.page = page;
+        super(page);
+
         this.shop_link = this.page.getByRole('banner').getByRole('link', { name: 'Shop' });
         this.select_country = this.page.getByRole('textbox', { name: 'Select Country' });
         this.search_input = this.page.getByPlaceholder('Search Keywords to search...');
@@ -15,7 +18,14 @@ exports.Shop = class Shop{
         this.add_to_cart = this.page.getByRole("button",{name: "Add"});
         this.cart_detail = this.page.locator('.login-section .cart-btn > a');
         this.number_of_cart_items = this.page.locator('.cart-btn .cart-value')
+
+        //countris label with checkbox
+        this.countriesWithCheckBox = this.page.locator('input[type="checkbox"][name="countries[]"]')
+
+        //View All links
+        this.viewAllLink = this.page.getByRole('link',{name:'View All'});
     }
+
 
     async addFirstProductToCart1() {
         // Navigate to Shop page

@@ -1,16 +1,23 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { BrandsPage } from '../pages/components/shop_components/brands';
-import { CountriesPage } from '../pages/components/countries';
+import { Countries, CountriesPage } from '../pages/components/Countries';
 import { CategoriesPage } from '../pages/components/categoriesPage';
+import { Home } from '../pages/home';
+import { Shop } from '../pages/shop';
+require('dotenv').config();
 
 test.describe('Filter Functionality Tests', () => {
+    
+  test.beforeEach('Cookies Accept', async ({page})=>{
+    const homePage = new Home(page);
+    await homePage.gotoHomePage();
+    await homePage.cookiesAccepted();
+  })
+
   test('Filter Categories', async ({ page }) => {
     const categoriesPage = new CategoriesPage(page);
     const brandsPage = new BrandsPage(page);
     const countriesPage = new CountriesPage(page);
-
-    // Go to homepage
-    await categoriesPage.gotoHomePage();
 
     // Browse various categories
     await categoriesPage.browseCategory('entertainments');
@@ -72,4 +79,43 @@ test.describe('Filter Functionality Tests', () => {
     await brandsPage.toggleBrand('fogg');
     await brandsPage.toggleBrand('neha');
   });
+
+  test('Filter Countries', async ({ page }) => {
+    let searchKeyword = 'in';
+    let selectedCountry = 'India';
+    let checkedCountry = null; // Ensure it's defined
+
+    const homePage = new Home(page);
+    const shop = new Shop(page);
+
+    // Apply country filter
+    await homePage.filterCountries(searchKeyword, selectedCountry);
+
+    // View all countries filter
+    await shop.viewAllLink.nth(1).click();
+
+    const countriesWithCheckBox = shop.countriesWithCheckBox;
+    await countriesWithCheckBox.last().waitFor({ state: 'visible' });
+
+    // Count total checkboxes
+    const countriesCount = await countriesWithCheckBox.count();
+    console.log('Countries Count:', countriesCount);
+
+    // Loop through checkboxes
+    for (let i = 0; i < countriesCount; i++) {
+        const country = shop.countriesWithCheckBox.nth(i);
+
+        if (await country.isChecked()) { //Ensure checkbox is checked
+            checkedCountry = await country.locator('..').locator('.form-check-label').textContent();
+            break; //Stop loop after finding the checked one
+        }
+    }
+
+    // Debugging Output
+    console.log('Checked Country:', checkedCountry);
+
+    // Ensure checkedCountry is not null before calling trim()
+    expect(checkedCountry).not.toBeNull();
+    expect(checkedCountry.trim()).toBe(selectedCountry);
+    });
 });

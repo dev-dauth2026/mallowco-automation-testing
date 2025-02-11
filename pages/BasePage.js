@@ -2,25 +2,37 @@
 export class BasePage {
     constructor(page) {
         this.page = page;
+
+        // Ensure that `page` is correctly assigned
+        if (!this.page) {
+            throw new Error("Page object is undefined. Make sure you are passing 'page' when creating the page object.");
+        }
         
         // Header Contact Info
-        this.phoneNumber = '[href="tel:0341501318"]';
-        this.email = '[href="mailto:admin@mallowco.com.au"]';
-        this.location = 'text=Brisbane, Queensland, Australia';
+        this.phoneNumber = page.locator('[href="tel:0341501318"]');
+        this.email = page.locator('[href="mailto:admin@mallowco.com.au"]');
+        this.location = page.locator('text=Brisbane, Queensland, Australia');
         
         // Logo and Search
-        this.logo = '.MallowCo';  // Update with actual logo selector
-        this.countrySelector = 'text=Select Country';
-        this.searchInput = 'input[placeholder="Search Keywords to search..."]';
-        this.searchButton = 'button.search-button';  // Update with actual search button selector
+        this.logo = page.locator('.header-logo a');  
+
+        //Country Dropdown
+        this.countrySelector = page.locator('.select2-container--default');
+        this.countrySelectorInputField = page.locator('.select2-search__field')
+        this.countrySelectDropdown = page.locator('.select2-results__options')
+        this.countrySelectOption = page.locator('.select2-results__option');
+
+        //Search
+        this.searchInput = page.locator('input[placeholder="Search Keywords to search..."]');
+        this.searchButton = page.locator('.fa-search'); 
         
         // User Navigation
-        this.welcomeDropdown = 'text=Welcome Hen';
-        this.cartIcon = 'text=My Cart';
-        this.cartCount = '.cart-count';  // Update with actual cart count selector
+        this.welcomeDropdown = page.locator('text=Welcome Hen');
+        this.cartIcon = page.locator('text=My Cart');
+        this.cartCount = page.locator('.cart-count');  // Update with actual cart count selector
         
         // Main Navigation
-        this.categoriesDropdown = 'text=Categories';
+        this.categoriesDropdown = page.locator('text=Categories');
         this.navLinks = {
             home: 'text=Home',
             shop: 'text=Shop',
@@ -31,9 +43,9 @@ export class BasePage {
         };
 
         // Cookies privacy
-        this.cookiesCustomise = 'button.cky-btn-customize';
-        this.cookiesReject = 'button.cky-btn-reject';
-        this.cookiesAccept = 'button.cky-btn-accept';
+        this.cookiesCustomise = page.getByRole('button',{name:'Customise'});
+        this.cookiesReject = page.getByRole('button',{name: 'Reject All'});
+        this.cookiesAccept = page.getByRole('button',{name: 'Accept All'} );
         
     }
 
@@ -44,20 +56,48 @@ export class BasePage {
 
     // Cookies Privacy selection
     async cookiesAccepted(){
-        await this.page.click(this.cookiesAccept);
+        await this.cookiesAccept.click();
     }
 
     async cookiesRejected(){
-        await this.page.click(this.cookiesReject);
+        await this.cookiesReject.click();
     }
 
     async cookiesCustomised(){
-        await this.page.click(this.cookiesCustomise);
+        await this.cookiesCustomise.click();
     }
 
     // Navigation Methods
     async navigateToHome() {
         await this.page.click(this.navLinks.home);
+    }
+
+    // Filter countries
+    async filterCountries(searchKeyword,selectedCountry){
+        await this.countrySelector.first().click();
+        await this.countrySelectorInputField.pressSequentially(searchKeyword,{delay:100})
+         // Wait for the dropdown options to load
+        await this.countrySelectDropdown.waitFor({state:'visible'});
+        // Get all country options count
+        const countrySelectOptionsCount = await this.countrySelectOption.count();
+
+         // Loop through the options
+        for(let i =0; i< countrySelectOptionsCount; i++){
+            const option = this.countrySelectOption.nth(i);
+            await option.waitFor({ state: 'visible' }); 
+            const text = await option.textContent();
+
+            if(text && text.trim() === selectedCountry){
+                await option.hover();
+                await option.click();
+                break;
+            }
+
+
+        }
+
+        await this.searchButton.click();
+
     }
 
     async navigateToShop() {

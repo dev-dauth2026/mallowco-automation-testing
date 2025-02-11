@@ -1,8 +1,8 @@
-exports.CountriesPage = class CountriesPage {
+export class Countries {
     constructor(page) {
       this.page = page;
       this.viewAllCountriesButton = page.locator('.filter-section:has-text("Country") .view-all-btn');
-      this.countries = {
+      this.countriesList = {
         australia: page.getByLabel('Australia', { exact: true }),
         china: page.getByLabel('China', { exact: true }),
         india: page.getByLabel('India', { exact: true }),
