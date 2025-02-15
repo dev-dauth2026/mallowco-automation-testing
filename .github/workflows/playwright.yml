@@ -19,16 +19,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
-          cache: 'npm'
 
       - name: Install Dependencies
-        run: npm ci
+        run: npm ci  
 
       - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+        run: npx playwright install --with-deps  
 
       - name: Run Playwright Tests
-        run: npx playwright test --reporter=dot,html
+        run: npx playwright test
 
       - name: Upload Playwright Report
         if: always()
