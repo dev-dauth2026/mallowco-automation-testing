@@ -1,4 +1,4 @@
-// pages/base.page.js
+import { CategoryNames } from "./ultils/constant/categoryNames";
 export class BasePage {
     constructor(page) {
         this.page = page;
@@ -32,7 +32,11 @@ export class BasePage {
         this.cartCount = page.locator('.cart-count');  // Update with actual cart count selector
         
         // Main Navigation
-        this.categoriesDropdown = page.locator('text=Categories');
+        this.categoriesDropdown = page.locator('.cateogry-btn');
+        this.categoriesDropdownList = page.locator('.category-dropdown li a')
+
+        // Navbar links
+        this.navContainer = page.locator('.navbar .menu-item')
         this.navLinks = {
             home: 'text=Home',
             shop: 'text=Shop',
@@ -72,36 +76,9 @@ export class BasePage {
         await this.page.click(this.navLinks.home);
     }
 
-    // Filter countries
-    async filterCountries(searchKeyword,selectedCountry){
-        await this.countrySelector.first().click();
-        await this.countrySelectorInputField.pressSequentially(searchKeyword,{delay:100})
-         // Wait for the dropdown options to load
-        await this.countrySelectDropdown.waitFor({state:'visible'});
-        // Get all country options count
-        const countrySelectOptionsCount = await this.countrySelectOption.count();
-
-         // Loop through the options
-        for(let i =0; i< countrySelectOptionsCount; i++){
-            const option = this.countrySelectOption.nth(i);
-            await option.waitFor({ state: 'visible' }); 
-            const text = await option.textContent();
-
-            if(text && text.trim() === selectedCountry){
-                await option.hover();
-                await option.click();
-                break;
-            }
-
-
-        }
-
-        await this.searchButton.click();
-
-    }
 
     async navigateToShop() {
-        await this.page.click(this.navLinks.shop);
+        await this.navContainer.locator(this.navLinks.shop).click();
     }
 
     async navigateToSpecial() {
@@ -181,4 +158,39 @@ export class BasePage {
     async getPageTitle() {
         return await this.page.title();
     }
+
+    // Filter countries
+    async filterCountries(searchKeyword,selectedCountry){
+        await this.countrySelector.first().click();
+        await this.countrySelectorInputField.pressSequentially(searchKeyword,{delay:100})
+         // Wait for the dropdown options to load
+        await this.countrySelectDropdown.waitFor({state:'visible'});
+        // Get all country options count
+        const countrySelectOptionsCount = await this.countrySelectOption.count();
+
+         // Loop through the options
+        for(let i =0; i< countrySelectOptionsCount; i++){
+            const option = this.countrySelectOption.nth(i);
+            await option.waitFor({ state: 'visible' }); 
+            const text = await option.textContent();
+
+            if(text && text.trim() === selectedCountry){
+                await option.hover();
+                await option.click();
+                break;
+            }
+
+
+        }
+
+        await this.searchButton.click();
+
+    }
+
+    // Categories Dropdown filter
+    async selectCategoryByName(categoryDisplayName) {
+        await this.categoriesDropdown.click();
+        await this.page.getByRole('link', { name: categoryDisplayName }).click();
+      }
+
 }
