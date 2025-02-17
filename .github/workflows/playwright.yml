@@ -35,22 +35,34 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      - name: Set up Environment Variables
+      - name: Validate Secrets (Without Printing)
         run: |
+          if [[ -z "${{ secrets.EMAIL }}" ]]; then echo "❌ EMAIL secret is missing!"; exit 1; fi
+          if [[ -z "${{ secrets.PASSWORD }}" ]]; then echo "❌ PASSWORD secret is missing!"; exit 1; fi
+          if [[ -z "${{ secrets.CONFIRM_PASSWORD }}" ]]; then echo "❌ CONFIRM_PASSWORD secret is missing!"; exit 1; fi
+          if [[ -z "${{ secrets.FIRSTNAME }}" ]]; then echo "❌ FIRSTNAME secret is missing!"; exit 1; fi
+        shell: bash
+
+      - name: Create .env File
+        run: |
+          touch .env
           echo "EMAIL=${{ secrets.EMAIL }}" >> .env
           echo "PASSWORD=${{ secrets.PASSWORD }}" >> .env
           echo "CONFIRM_PASSWORD=${{ secrets.CONFIRM_PASSWORD }}" >> .env
           echo "FIRSTNAME=${{ secrets.FIRSTNAME }}" >> .env
+          echo "✅ .env file created successfully."
         shell: bash
 
-      - name: Run Playwright Tests
+      - name: Run Playwright Tests Securely
         env:
           CI: true
           EMAIL: ${{ secrets.EMAIL }}
           PASSWORD: ${{ secrets.PASSWORD }}
           CONFIRM_PASSWORD: ${{ secrets.CONFIRM_PASSWORD }}
           FIRSTNAME: ${{ secrets.FIRSTNAME }}
-        run: npx playwright test --reporter=dot,html
+        run: |
+          echo "🚀 Running Playwright tests..."
+          npx playwright test --reporter=dot,html
 
       - name: Upload Playwright Report
         if: always()
