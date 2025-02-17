@@ -53,7 +53,7 @@ jobs:
           echo "✅ .env file created successfully."
         shell: bash
 
-      - name: Run Playwright Tests Securely
+      - name: Run Playwright Tests with Multiple Workers
         env:
           CI: true
           EMAIL: ${{ secrets.EMAIL }}
@@ -61,8 +61,8 @@ jobs:
           CONFIRM_PASSWORD: ${{ secrets.CONFIRM_PASSWORD }}
           FIRSTNAME: ${{ secrets.FIRSTNAME }}
         run: |
-          echo "🚀 Running Playwright tests..."
-          npx playwright test --reporter=dot,html
+          echo "🚀 Running Playwright tests with 2 workers..."
+          npx playwright test --workers=2 --reporter=dot,html
 
       - name: Upload Playwright Report
         if: always()
