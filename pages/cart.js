@@ -2,7 +2,8 @@ import { BasePage } from "./BasePage";
 
 export class Cart extends BasePage {
   constructor(page) {
-    this.page = page;
+    super(page)
+     
     this.shop_link = page
       .getByRole("banner")
       .getByRole("link", { name: "Shop" });
