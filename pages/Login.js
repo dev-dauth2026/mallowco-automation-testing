@@ -1,8 +1,10 @@
-export class Login {
+import { BasePage } from "./BasePage";
+
+export class Login extends BasePage {
 
   constructor(page) {
+    super(page)
 
-    this.page = page;
     this.login_link =  page.getByRole('link', { name: 'Login', exact: true });
     this.username_textbox = page.getByLabel("E-Mail Address *");
     this.password_textbox = page.locator("#login_password");
