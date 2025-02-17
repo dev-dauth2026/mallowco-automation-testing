@@ -35,9 +35,21 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
+      - name: Set up Environment Variables
+        run: |
+          echo "EMAIL=${{ secrets.EMAIL }}" >> .env
+          echo "PASSWORD=${{ secrets.PASSWORD }}" >> .env
+          echo "CONFIRM_PASSWORD=${{ secrets.CONFIRM_PASSWORD }}" >> .env
+          echo "FIRSTNAME=${{ secrets.FIRSTNAME }}" >> .env
+        shell: bash
+
       - name: Run Playwright Tests
         env:
           CI: true
+          EMAIL: ${{ secrets.EMAIL }}
+          PASSWORD: ${{ secrets.PASSWORD }}
+          CONFIRM_PASSWORD: ${{ secrets.CONFIRM_PASSWORD }}
+          FIRSTNAME: ${{ secrets.FIRSTNAME }}
         run: npx playwright test --reporter=dot,html
 
       - name: Upload Playwright Report
