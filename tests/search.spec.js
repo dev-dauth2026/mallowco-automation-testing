@@ -1,6 +1,6 @@
 import { test,expect } from '@playwright/test';
-import { SearchPage } from '../pages/search';
-require('dotenv').config();
+import { SearchPage } from '../pages/Search';
+import 'dotenv/config';
 
 test.describe('Search Functionality Tests', () => {
   

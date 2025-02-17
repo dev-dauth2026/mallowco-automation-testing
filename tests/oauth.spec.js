@@ -1,6 +1,6 @@
 import {test,expect} from '@playwright/test'
 import { Auth } from '../pages/Login'
-require('dotenv').config();
+import 'dotenv/config';
 
 test.describe('User Authentication Test', ()=>{
     let auth;

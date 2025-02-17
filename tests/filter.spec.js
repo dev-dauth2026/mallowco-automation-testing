@@ -1,7 +1,7 @@
 import { test, expect, request } from '@playwright/test';
-import { Home } from '../pages/home';
-import { Shop } from '../pages/shop';
-require('dotenv').config();
+import { Home } from '../pages/Home';
+import { Shop } from '../pages/Shop';
+import 'dotenv/config';
 import { ProductDetail } from '../pages/ProductDetail';
 
 test.describe('Filter Functionality Tests', () => {

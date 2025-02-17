@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { Shop } from '../pages/shop';
-require('dotenv').config();
+import { Shop } from '../pages/Shop';
+import 'dotenv/config';
 
 test.describe('User Sign up Test',()=>{
       

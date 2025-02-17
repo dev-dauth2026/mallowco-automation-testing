@@ -32,21 +32,6 @@ exports.CategoriesPage = class CategoriesPage {
       await this.page.goto('https://mallowco.com.au/');
     }
   
-    async browseCategory(category) {
-
-      await this.categories_link.click();  
-      await this.categories[category].click();
-    }
-  
-    async setMaxPrice(price) {
-      await this.priceFilter.click();
-      await this.priceFilter.fill(price);
-      await this.page.getByRole('button', { name: '' }).click();
-    }
-  
-    async clearMaxPrice() {
-      await this.priceFilter.dblclick();
-      await this.priceFilter.fill('');
-    }
+    
   };
   

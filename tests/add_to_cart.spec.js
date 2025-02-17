@@ -1,10 +1,10 @@
 import {test,expect} from "@playwright/test"
 import { Cart } from "../pages/cart";
 import { CartModal } from "../pages/components/CartModal";
-import { Home } from "../pages/home";
-import { Login } from "../pages/login";
-import { Shop } from "../pages/shop";
-require('dotenv').config();
+import { Home } from "../pages/Home";
+import { Login } from "../pages/Login";
+import { Shop } from "../pages/Shop";
+import 'dotenv/config';
 
 test.describe('Cart testing ', ()=>{
     test('Product add to cart test', async({page})=>{
