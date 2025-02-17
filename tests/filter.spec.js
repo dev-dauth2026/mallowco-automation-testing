@@ -1,11 +1,7 @@
 import { test, expect, request } from '@playwright/test';
-import { BrandsPage } from '../pages/components/shop_components/brands';
-import { Countries, CountriesPage } from '../pages/components/Countries';
-import { CategoriesPage } from '../pages/components/categoriesPage';
 import { Home } from '../pages/home';
 import { Shop } from '../pages/shop';
 require('dotenv').config();
-import { CategoryNames } from '../pages/ultils/constant/categoryNames';
 import { ProductDetail } from '../pages/ProductDetail';
 
 test.describe('Filter Functionality Tests', () => {
