@@ -1,6 +1,9 @@
-export class Signup {
+import { BasePage } from "./BasePage";
+
+export class Signup extends BasePage{
 
     constructor(page){
+        super(page);
 
         this.page = page;
         this.signup_link = page.getByRole('link', { name: 'Sign Up' })
