@@ -14,10 +14,6 @@ export class Login extends BasePage {
     this.login_error_message = page.getByText('These credentials do not match our records.', { exact: false });
   }
 
-  async goHomepage() {
-    await this.page.goto(process.env.TEST_URL);
-  }
-
   async login(username, password) {
     await this.login_link.click();
     await this.username_textbox.fill(username);
