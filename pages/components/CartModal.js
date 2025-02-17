@@ -1,5 +1,5 @@
 // Cart.js
-exports.CartModal = class CartModal {
+export class CartModal {
     constructor(page) {
       this.page = page;
 

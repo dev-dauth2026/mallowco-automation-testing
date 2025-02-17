@@ -86,7 +86,7 @@ test.describe('Filter Functionality Tests', () => {
   });
 
   //** Filter categories using category checkbox */
-  test.only('Filter by single category checkbox', async () => {
+  test('Filter by single category checkbox', async () => {
     await shopPage.navigateToShop();
     await page.waitForLoadState('networkidle');
 

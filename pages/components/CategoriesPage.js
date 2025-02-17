@@ -1,4 +1,4 @@
-exports.CategoriesPage = class CategoriesPage {
+export class CategoriesPage {
     constructor(page) {
       this.page = page;
       this.categories_link = page.getByRole('banner').getByText('Categories')

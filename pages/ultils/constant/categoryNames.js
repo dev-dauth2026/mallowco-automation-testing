@@ -1,7 +1,7 @@
 /**
  * @enum {string}
  */
-const CategoryNames = Object.freeze({
+export const CategoryNames = Object.freeze({
   ENTERTAINMENTS: 'Entertainments & Fun',
   CLOTHES: 'Clothes & Appearance',
   KITCHEN: 'Kitchen & Utensils',
@@ -25,4 +25,4 @@ const CategoryNames = Object.freeze({
   GROCERIES: 'Groceries',
 });
 
-module.exports = { CategoryNames };
+

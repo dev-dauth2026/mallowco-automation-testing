@@ -1,4 +1,4 @@
-exports.BrandsPage = class BrandsPage {
+export class BrandsPage {
     constructor(page) {
       this.page = page;
       this.viewAllBrandsButton = page.locator('.filter-section:has-text("Brands") .view-all-btn');;
