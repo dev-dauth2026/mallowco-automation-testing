@@ -14,7 +14,7 @@ test.describe('Filter Functionality Tests', () => {
     homePage = new Home(page);
     shopPage = new Shop(page);
     productDetailPage = new ProductDetail(page);
-    const request = 
+  
     await homePage.gotoHomePage();
     await homePage.cookiesAccepted();
     
