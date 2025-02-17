@@ -1,100 +1,42 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, request } from '@playwright/test';
 import { BrandsPage } from '../pages/components/shop_components/brands';
 import { Countries, CountriesPage } from '../pages/components/Countries';
 import { CategoriesPage } from '../pages/components/categoriesPage';
 import { Home } from '../pages/home';
 import { Shop } from '../pages/shop';
 require('dotenv').config();
+import { CategoryNames } from '../pages/ultils/constant/categoryNames';
+import { ProductDetail } from '../pages/ProductDetail';
 
 test.describe('Filter Functionality Tests', () => {
+
+    let shopPage;
+    let homePage;
+    let productDetailPage;
     
   test.beforeEach('Cookies Accept', async ({page})=>{
-    const homePage = new Home(page);
+    homePage = new Home(page);
+    shopPage = new Shop(page);
+    productDetailPage = new ProductDetail(page);
+    const request = 
     await homePage.gotoHomePage();
     await homePage.cookiesAccepted();
+    
   })
 
-  test('Filter Categories', async ({ page }) => {
-    const categoriesPage = new CategoriesPage(page);
-    const brandsPage = new BrandsPage(page);
-    const countriesPage = new CountriesPage(page);
-
-    // Browse various categories
-    await categoriesPage.browseCategory('entertainments');
-    await categoriesPage.browseCategory('clothes');
-    await categoriesPage.browseCategory('kitchen');
-    await categoriesPage.browseCategory('sweets');
-    await categoriesPage.browseCategory('wine');
-    await categoriesPage.browseCategory('fruits');
-    await categoriesPage.browseCategory('thai');
-    await categoriesPage.browseCategory('comboPack');
-    await categoriesPage.browseCategory('festive');
-    await categoriesPage.browseCategory('dailyNeeds');
-    await categoriesPage.browseCategory('sugarTea');
-    await categoriesPage.browseCategory('dairy');
-    await categoriesPage.browseCategory('frozenFoods');
-    await categoriesPage.browseCategory('nutsOil');
-    await categoriesPage.browseCategory('riceFlour');
-    await categoriesPage.browseCategory('pickleChutney');
-    await categoriesPage.browseCategory('snacks');
-    await categoriesPage.browseCategory('spices');
-    await categoriesPage.browseCategory('groceries');
-
-    // Set price filter
-    await categoriesPage.setMaxPrice('5');
-    await categoriesPage.clearMaxPrice();
-
-    // Toggle countries
-    await countriesPage.viewAllCountries();
-
-    await countriesPage.toggleCountry('australia');
-    await countriesPage.toggleCountry('china');
-    await countriesPage.toggleCountry('india');
-    await countriesPage.toggleCountry('maldives');
-    await countriesPage.toggleCountry('mexico');
-    await countriesPage.toggleCountry('nepal');
-    await countriesPage.toggleCountry('pakistan');
-    await countriesPage.toggleCountry('philippines');
-    await countriesPage.toggleCountry('southKorea');
-    await countriesPage.toggleCountry('sriLanka');
-    await countriesPage.toggleCountry('thailand');
-    await countriesPage.toggleCountry('turkey');
-    await countriesPage.toggleCountry('uae');
-    await countriesPage.toggleCountry('uk');
-    await countriesPage.toggleCountry('usa');
-
-    // Toggle brands
-    await brandsPage.viewAllBrands();
-
-    await brandsPage.toggleBrand('godrej');
-    await brandsPage.toggleBrand('dettol');
-    await brandsPage.toggleBrand('waiWai');
-    await brandsPage.toggleBrand('silka');
-    await brandsPage.toggleBrand('colgate');
-    await brandsPage.toggleBrand('sensodyne');
-    await brandsPage.toggleBrand('patanjali');
-    await brandsPage.toggleBrand('pepsodent');
-    await brandsPage.toggleBrand('siso');
-    await brandsPage.toggleBrand('vip');
-    await brandsPage.toggleBrand('fogg');
-    await brandsPage.toggleBrand('neha');
-  });
-
+  // ** Filter products using countries origin search/dropdown countries
   test('Filter Countries', async ({ page }) => {
     let searchKeyword = 'in';
     let selectedCountry = 'India';
     let checkedCountry = null; // Ensure it's defined
 
-    const homePage = new Home(page);
-    const shop = new Shop(page);
-
     // Apply country filter
     await homePage.filterCountries(searchKeyword, selectedCountry);
 
     // View all countries filter
-    await shop.viewAllLink.nth(1).click();
+    await shopPage.viewAllLink.nth(1).click();
 
-    const countriesWithCheckBox = shop.countriesWithCheckBox;
+    const countriesWithCheckBox = shopPage.countriesWithCheckBox;
     await countriesWithCheckBox.last().waitFor({ state: 'visible' });
 
     // Count total checkboxes
@@ -103,7 +45,7 @@ test.describe('Filter Functionality Tests', () => {
 
     // Loop through checkboxes
     for (let i = 0; i < countriesCount; i++) {
-        const country = shop.countriesWithCheckBox.nth(i);
+        const country = shopPage.countriesWithCheckBox.nth(i);
 
         if (await country.isChecked()) { //Ensure checkbox is checked
             checkedCountry = await country.locator('..').locator('.form-check-label').textContent();
@@ -118,4 +60,138 @@ test.describe('Filter Functionality Tests', () => {
     expect(checkedCountry).not.toBeNull();
     expect(checkedCountry.trim()).toBe(selectedCountry);
     });
+
+  //** */ Filter products using dropdown categories  
+  test('Filter Categories Dropdown', async ({ page }) => {
+
+    const categoriesCount = await shopPage.categoriesDropdownList.count();
+
+    // Now iterate over the CategoryNames
+    for (let i=0; i<categoriesCount;i++) {
+        const displayName = await shopPage.categoriesDropdownList.nth(i).textContent();
+        console.log(displayName);
+
+        // 1. Select this category from the dropdown
+        await shopPage.selectCategoryByName(displayName);
+
+        await expect(page).toHaveURL(/shop/);
+
+        await shopPage.product_name.first().click();
+
+        await page.waitForLoadState('networkidle');
+
+        const selectedProductCategory = await productDetailPage.productCategory.first().textContent();
+
+        await expect(selectedProductCategory.trim()).toBe(displayName.trim())
+
+      
+    }
+
+  });
+
+  //** Filter categories using category checkbox */
+  test.only('Filter by single category checkbox', async () => {
+    await shopPage.navigateToShop();
+    await page.waitForLoadState('networkidle');
+
+    const categoryWithCheckBoxCount = await shopPage.categoriesWithCheckBox.count();
+
+    for(let i=0; i< categoryWithCheckBoxCount; i++){
+        const checkedCategory = await shopPage.categoriesWithCheckBox.nth(i).textContent();
+        await shopPage.categoriesWithCheckBox.nth(i).click();
+
+        expect(await shopPage.categoriesWithCheckBox.isChecked()).toBeTruthy();
+
+        await shopPage.product_name.first().click();
+        const productDetailCategory = await productDetailPage.productCategory.first().textContent()
+
+        await expect(productDetailCategory.trim()).toBe(checkedCategory.trim());
+
+    }
+
+  });
+
+  //** Filter products using price range */
+  test('Filter by Price', async()=>{
+    let minPrice = 5;
+    let maxPrice = 15;
+    await shopPage.navigateToShop();
+    await page.waitForLoadState('networkidle');
+
+    // Set maxprice filter
+    await shopPage.setMaxPrice(maxPrice);
+    // maxPrice Assertion
+    const firstProductMaxPrice =  (shopPage.product_price.first()).split(" ");
+    const firstProductMaxPriceNumber = firstProductMaxPrice[2];
+    expect(firstProductMaxPriceNumber).toBeLessThanOrEqual(maxPrice);
+    // clear the maxPrice input
+    await shopPage.clearMaxPrice();
+
+    // set minPrice filter
+    await shopPage.setMinPrice(minPrice);
+    // minPrice Assertion
+    const firstProductMinPrice =  (shopPage.product_price.first()).split(" ");
+    const firstProductMinPriceNumber = firstProductMinPrice[2];
+    expect(firstProductMinPriceNumber).toBeGreaterThanOrEqual(minPrice);
+
+    // clear the minPrice input
+    await shopPage.clearMinPrice();
+
+    // set minPrice and maxPrice at a same time
+    await shopPage.setMinMaxPrice(minPrice,maxPrice);
+    // both min and max price assertion
+    const firstProductMinMaxPrice =  (shopPage.product_price.first()).split(" ");
+    const firstProductMinMaxPriceNumber = firstProductMinMaxPrice[2];
+    expect(firstProductMinMaxPriceNumber).toBeGreaterThanOrEqual(minPrice);
+    expect(firstProductMinMaxPriceNumber).toBeLessThanOrEqual(minPrice);
+    // clear the min and max price input field
+
+    await shopPage.clearMaxPrice();
+  })
+
+  //** Filter products using country checkbox */
+  test('Filter by Country with checkbox', async()=>{
+    await shopPage.navigateToShop();
+    await page.waitForLoadState('networkidle');
+
+    const countriesWithCheckBoxCount = await shopPage.countriesWithCheckBox.count();
+
+    for(let i=0; i< countriesWithCheckBoxCount; i++){
+        const checkedCategory = await shopPage.countriesWithCheckBox.nth(i).textContent();
+        await shopPage.countriesWithCheckBox.nth(i).click();
+
+        expect(await shopPage.countriesWithCheckBox.isChecked()).toBeTruthy();
+
+        await shopPage.product_name.first().click();
+        const productDetailCategory = await productDetailPage.productCategory.first().textContent()
+
+        await expect(productDetailCategory.trim()).toBe(checkedCategory.trim());
+
+    }
+    
+  })
+
+  //** Filter product using brand checkbox */
+  test('Filter by Brand with checkbox', async()=>{
+    await shopPage.navigateToShop();
+    await page.waitForLoadState('networkidle');
+
+    const brandWithCheckBoxCount = await shopPage.brandWithCheckBox.count();
+
+    for(let i=0; i< brandWithCheckBoxCount; i++){
+        const checkedBrand = await shopPage.brandWithCheckBox.nth(i).textContent();
+        await shopPage.brandWithCheckBox.nth(i).click();
+
+        expect(await shopPage.brandWithCheckBox.isChecked()).toBeTruthy();
+
+        await shopPage.product_name.first().click();
+        const productDetailBrand = await productDetailPage.productBrand.textContent()
+
+        await expect(productDetailBrand.trim()).toBe(checkedBrand.trim());
+
+    }
+    
+  })
+
+  
 });
