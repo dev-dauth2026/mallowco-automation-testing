@@ -1,4 +1,3 @@
-import { CategoryNames } from "./ultils/constant/categoryNames";
 export class BasePage {
     constructor(page) {
         this.page = page;
