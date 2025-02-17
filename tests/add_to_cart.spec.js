@@ -1,9 +1,9 @@
 import {test,expect} from "@playwright/test"
-import { Cart } from "../pages/cart";
 import { CartModal } from "../pages/components/CartModal";
 import { Home } from "../pages/Home";
 import { Login } from "../pages/Login";
 import { Shop } from "../pages/Shop";
+import { Cart } from "../pages/Cart";
 import 'dotenv/config';
 
 test.describe('Cart testing ', ()=>{
