@@ -11,6 +11,8 @@ export class Login extends BasePage {
     this.login_button = page.getByRole("button", { name: "Login" });
     this.profile_link = page.getByRole('link', { name: `Welcome ${process.env.FIRSTNAME}` });
     this.login_error_message = page.getByText('These credentials do not match our records.', { exact: false });
+    this.forgot_your_password = page.getByRole('link', { name: 'Forgot Your Password?' });
+
   }
 
   async login(username, password) {
