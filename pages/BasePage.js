@@ -1,5 +1,5 @@
-import { HeaderComponent } from '.components/HeaderComponent';
-import { FooterComponent } from '.components/FooterComponent';
+import { HeaderComponent } from './components/HeaderComponent';
+import { FooterComponent } from './components/FooterComponent';
 export class BasePage {
     constructor(page) {
         this.page = page;
