@@ -1,9 +1,13 @@
 import { defineConfig, devices } from '@playwright/test';
 import { chromium } from 'playwright-extra';
-import stealth from 'puppeteer-extra-plugin-stealth';
+import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 
 // Apply Stealth Plugin
-chromium.use(stealth());
+(async () => {
+  // configure the Stealth plugin
+  chromium.use(StealthPlugin())
+  }
+);
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
@@ -34,7 +38,7 @@ export default defineConfig({
     /* Base URL to use in actions like `await page.goto('/')`. */
     // baseURL: 'http://127.0.0.1:3000',
     browserName: 'chromium',
-    headless: true, 
+    headless: false, 
     userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) ' +
                'AppleWebKit/537.36 (KHTML, like Gecko) ' +
                'Chrome/110.0.0.0 Safari/537.36',
