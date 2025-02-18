@@ -24,6 +24,17 @@ export class BasePage {
         //Search
         this.searchInput = page.locator('input[placeholder="Search Keywords to search..."]');
         this.searchButton = page.locator('.fa-search'); 
+
+        //login/Signup links if not logged in
+        this.loginLink = page.locator('.login-btn .login');
+        this.signupLink = page.locator('.login-btn .register');
+
+        //profile link after logged in
+        this.profileLink = page.getByRole('link', { name: `Welcome ${process.env.FIRSTNAME}` });
+
+        // My cart link
+        this.myCart = page.locator('.cart-btn a');
+
         
         // User Navigation
         this.welcomeDropdown = page.locator('text=Welcome Hen');

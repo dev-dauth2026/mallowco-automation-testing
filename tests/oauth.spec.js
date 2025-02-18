@@ -2,8 +2,8 @@ import {test,expect} from '@playwright/test'
 import { Login } from '../pages/Login'
 import 'dotenv/config';
 
-test.describe('User Authentication Test', ()=>{
-    let auth;
+test.describe('User Login Test', ()=>{
+    let login;
 
     test.beforeEach('Navigate to Home Page ',async({page})=>{
         login =  new Login(page);
