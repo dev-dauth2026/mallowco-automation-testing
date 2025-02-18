@@ -9,7 +9,7 @@ test.describe('User Login Test', ()=>{
         login =  new Login(page);
 
         // Navigate to the home page
-        await login.goHomepage();
+        await login.gotoHomePage();
     });
 
     test('User login successful',async ({page})=>{
