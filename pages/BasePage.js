@@ -12,34 +12,23 @@ export class BasePage {
         this.email = page.locator('[href="mailto:admin@mallowco.com.au"]');
         this.location = page.locator('text=Brisbane, Queensland, Australia');
         
-        // Logo and Search
+        // Logo & Navigation
         this.logo = page.locator('.header-logo a');  
-
-        //Country Dropdown
         this.countrySelector = page.locator('.select2-container--default');
         this.countrySelectorInputField = page.locator('.select2-search__field')
         this.countrySelectDropdown = page.locator('.select2-results__options')
         this.countrySelectOption = page.locator('.select2-results__option');
-
-        //Search
         this.searchInput = page.locator('input[placeholder="Search Keywords to search..."]');
         this.searchButton = page.locator('.fa-search'); 
 
-        //login/Signup links if not logged in
+        //User Account Links
         this.loginLink = page.locator('.login-btn .login');
         this.signupLink = page.locator('.login-btn .register');
-
-        //profile link after logged in
         this.profileLink = page.getByRole('link', { name: `Welcome ${process.env.FIRSTNAME}` });
 
         // My cart link
         this.myCart = page.locator('.cart-btn a');
-
-        
-        // User Navigation
-        this.welcomeDropdown = page.locator('text=Welcome Hen');
-        this.cartIcon = page.locator('text=My Cart');
-        this.cartCount = page.locator('.cart-count');  // Update with actual cart count selector
+        this.cartCount = page.locator('.cart-value'); 
         
         // Main Navigation
         this.categoriesDropdown = page.locator('.cateogry-btn');
