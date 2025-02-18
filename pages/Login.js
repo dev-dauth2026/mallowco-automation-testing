@@ -6,7 +6,7 @@ export class Login extends BasePage {
     super(page)
 
     this.loginLink =  page.getByRole('link', { name: 'Login', exact: true });
-    this.usernameTextbox = page.getByLabel("E-Mail Address *");
+    this.usernameTextbox = page.locator("input[type='email'][name='email']");
     this.passwordTextbox = page.locator("#login_password");
     this.loginButton = page.getByRole("button", { name: "Login" });
     this.loginErrorMessage = page.getByText('These credentials do not match our records.', { exact: false });
