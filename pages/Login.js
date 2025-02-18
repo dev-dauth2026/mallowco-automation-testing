@@ -12,6 +12,9 @@ export class Login extends BasePage {
     this.profile_link = page.getByRole('link', { name: `Welcome ${process.env.FIRSTNAME}` });
     this.login_error_message = page.getByText('These credentials do not match our records.', { exact: false });
     this.forgot_your_password = page.getByRole('link', { name: 'Forgot Your Password?' });
+    this.facebook_login = page.locator('.login-facebook-btn');
+    this.google_login = page.locator('.login-google-btn');
+    this.signup_link = page.getByRole('link',{name:'Sign Up'});
 
   }
 
@@ -33,5 +36,9 @@ export class Login extends BasePage {
 
   async isErrorMessageVisible(){
     return this.login_error_message.isVisible();
+  }
+
+  async clickSignUpLink(){
+    await this.signup_link.click();
   }
 }
