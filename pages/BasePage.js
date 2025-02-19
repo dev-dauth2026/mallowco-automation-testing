@@ -11,6 +11,11 @@ export class BasePage {
 
         this.header = new HeaderComponent(page);
         this.footer = new FooterComponent(page);
+
+        // Cookies privacy
+        this.cookiesCustomise = page.getByRole('button',{name:'Customise'});
+        this.cookiesReject = page.getByRole('button',{name: 'Reject All'});
+        this.cookiesAccept = page.getByRole('button',{name: 'Accept All'} );
         
     }    
 
