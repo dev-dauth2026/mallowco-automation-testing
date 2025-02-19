@@ -15,10 +15,6 @@ export class Signup extends BasePage{
 
     }
 
-    async goHomePage(){
-        await this.page.goto(process.env.TEST_URL);
-    }
-
     async signUp(fullname,email,password,confirm_password){
         await this.signup_link.click();
         await this.fullname.fill(fullname);
