@@ -5,11 +5,12 @@ import 'dotenv/config';
 test.describe('User Login Test', ()=>{
     let login;
 
-    test.beforeEach('Navigate to Home Page ',async({page})=>{
+test.beforeEach('Navigate to Home Page ',async({page})=>{
         login =  new Login(page);
 
         // Navigate to the home page
         await login.gotoHomePage();
+        await login.cookiesAccepted();
     });
 
     test('User login successful',async ({page})=>{
@@ -21,6 +22,7 @@ test.describe('User Login Test', ()=>{
         await page.waitForTimeout(2000);
 
         const isSuccessful = await login.isLoginSuccessful();
+
         expect(isSuccessful).toBe(true);
     });
 
