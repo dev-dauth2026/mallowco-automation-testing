@@ -20,7 +20,6 @@ export default defineConfig({
     geolocation: { latitude: 37.7749, longitude: -122.4194 },
     locale: 'en-US',
     timezoneId: 'America/Los_Angeles',
-    storageState: 'session.json',
     trace: 'on-first-retry',
     screenshot: 'on-first-failure',
     video: 'on-first-failure',
