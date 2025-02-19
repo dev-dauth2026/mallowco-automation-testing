@@ -41,6 +41,7 @@ jobs:
           if [[ -z "${{ secrets.PASSWORD }}" ]]; then echo "❌ PASSWORD secret is missing!"; exit 1; fi
           if [[ -z "${{ secrets.CONFIRM_PASSWORD }}" ]]; then echo "❌ CONFIRM_PASSWORD secret is missing!"; exit 1; fi
           if [[ -z "${{ secrets.FIRSTNAME }}" ]]; then echo "❌ FIRSTNAME secret is missing!"; exit 1; fi
+          if [[ -z "${{ secrets.TEST_URL }}" ]]; then echo "❌ TEST_URL secret is missing!"; exit 1; fi
         shell: bash
 
       - name: Create .env File
@@ -50,6 +51,8 @@ jobs:
           echo "PASSWORD=${{ secrets.PASSWORD }}" >> .env
           echo "CONFIRM_PASSWORD=${{ secrets.CONFIRM_PASSWORD }}" >> .env
           echo "FIRSTNAME=${{ secrets.FIRSTNAME }}" >> .env
+          # ADD THIS:
+          echo "TEST_URL=${{ secrets.TEST_URL }}" >> .env
           echo "✅ .env file created successfully."
         shell: bash
 
@@ -60,6 +63,8 @@ jobs:
           PASSWORD: ${{ secrets.PASSWORD }}
           CONFIRM_PASSWORD: ${{ secrets.CONFIRM_PASSWORD }}
           FIRSTNAME: ${{ secrets.FIRSTNAME }}
+          # ADD THIS:
+          TEST_URL: ${{ secrets.TEST_URL }}
         run: |
           echo "🚀 Running Playwright tests with 2 workers..."
           npx playwright test --workers=2 --reporter=dot,html
