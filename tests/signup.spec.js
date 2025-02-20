@@ -187,12 +187,12 @@ test.describe('User Sign up Test',()=>{
   test('Sign up test fail - email already in use', async ({ page }) => {
     //destructuring the .ev variables for clarity
     const {
-      FIRSTNAME = '',
-      LASTNAME = '',
-      EMAIL = '',
-      PASSWORD = '',
-      CONFIRM_PASSWORD = '',
-  } = process.env;
+        FIRSTNAME = '',
+        LASTNAME = '',
+        EMAIL = '',
+        PASSWORD = '',
+        CONFIRM_PASSWORD = '',
+    } = process.env;
 
     const fullName = `${FIRSTNAME} ${LASTNAME}`;
     await signup.signUp(fullName,EMAIL,PASSWORD,CONFIRM_PASSWORD);
@@ -203,6 +203,41 @@ test.describe('User Sign up Test',()=>{
     await expect(page.getByText(/already registered/i)).toBeVisible();
     await expect(page.getByRole('link', { name: /Welcome/i })).toHaveCount(0);
   });
+
+  // Sign up with Facebook
+  test('Sign up with Facebook Account', async({page})=>{
+    await signup.signupWithFacebook();
+
+    //Wait for the popup to finish loading
+    await page.waitForLoadState('networkidle');
+
+    //Assert the popup’s URL is indeed Facebook (or at least includes "facebook.com")
+    await expect(page).toHaveURL(/facebook\.com/i);
+
+  })
+
+  // Sign up with Google Account
+  test('Sign up with Google Account', async({page})=>{
+    await signup.signUpWithGoogle();
+
+    //Wait for the popup to finish loading
+    await page.waitForLoadState('networkidle');
+
+    //Assert the popup’s URL is indeed Google (or at least includes "google.com")
+    await expect(page).toHaveURL(/google\.com/i);
+
+  })
+
+  // Navigate to Login page using Login link
+  test('Navigate to Login page using Login link', async({page})=>{
+    await signup.gotoLoginPage();
+
+    //Wait for the popup to finish loading
+    await page.waitForLoadState('networkidle');
+
+    //Assert the popup’s URL is indeed Google (or at least includes "google.com")
+    await expect(page).toHaveURL(/login/);
+  })
       
     
 
