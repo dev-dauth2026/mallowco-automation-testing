@@ -7,7 +7,4 @@ export class Home extends BasePage {
 
         
     }
-    async gotoHomePage() {
-        await this.page.goto(process.env.TEST_URL);
-      }
 }
