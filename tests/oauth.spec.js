@@ -15,6 +15,7 @@ test.beforeEach('Navigate to Home Page ',async({page})=>{
 
     test('User login successful',async ({page})=>{
         
+        await login.loginLink.click();
         // Perform login with valid credentials
         await login.login(process.env.EMAIL, process.env.PASSWORD);
 
@@ -28,6 +29,7 @@ test.beforeEach('Navigate to Home Page ',async({page})=>{
 
     test('User login fail',async({page})=>{
         
+        await login.loginLink.click();
         // Perform login with invalid credentials
         await login.login('david2020g@gmail.com','dav1234#')
         
