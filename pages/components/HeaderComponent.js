@@ -170,5 +170,10 @@ export class HeaderComponent {
         await this.page.getByRole('link', { name: categoryDisplayName }).click();
       }
 
+    // Show My Cart Modal Detail
+    async showMyCartDetails(){
+        await this.myCart.click();
+    }
+
 
 }
