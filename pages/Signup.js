@@ -6,17 +6,17 @@ export class Signup extends BasePage{
         super(page);
 
         this.page = page;
-        this.signup_link = page.getByRole('link', { name: 'Sign Up' })
+
         this.fullname = page.getByPlaceholder('Enter your full name');
         this.email = page.getByPlaceholder('Enter your email address');
-        this.password = page.getByLabel('Password *', { exact: true });
-        this.confirm_password = page.getByLabel('Confirm Password *');
-        this.register_button = page.getByRole('button', { name: 'Register' });
+        this.password = page.locator('input[type="password"][name="password"]');
+        this.confirmPassword = page.locator('input[type="password"][name="password_confirmation"]');
+        this.registerButton = page.getByRole('button', { name: 'Register' });
 
     }
 
     async signUp(fullname,email,password,confirm_password){
-        await this.signup_link.click();
+
         await this.fullname.fill(fullname);
         await this.email.fill(email);
         await this.password.fill(password);
