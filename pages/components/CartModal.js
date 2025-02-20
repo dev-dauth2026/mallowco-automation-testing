@@ -3,8 +3,10 @@ export class CartModal {
     constructor(page) {
       this.page = page;
 
-      this.cart_items = page.locator(".side-cart-items .cart-item");
-      this.cart_item_name = page.locator(".side-cart-items .cart-item  h4");
+      this.cartItems = page.locator(".side-cart-items .cart-item");
+      this.cartItemName = page.locator(".side-cart-items .cart-item  h4");
+      this.noCartItemText = page.locator(".cart-text", { hasText: "You don't have any items in your cart." });
+      this.cartStartShoppingbutton = page.locator(".carts-btn", { hasText: "Start Shopping" });
     }
 
     async waitForProductNameInCart(name) {
@@ -15,9 +17,9 @@ export class CartModal {
     
     async addedProductItemCheck() {
         // Wait specifically for the last item to be visible
-        await this.cart_item_name.last().waitFor({ state: "visible" });
+        await this.cartItemName.last().waitFor({ state: "visible" });
     
-        const lastCartItem = (await this.cart_item_name.last().textContent()).trim();
+        const lastCartItem = (await this.cartItemName.last().textContent()).trim();
 
       return lastCartItem;
     }
