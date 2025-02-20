@@ -11,7 +11,7 @@ export class Shop extends BasePage{
         this.product_verity = this.page.locator('.product-verity js-product_quantity');
         this.product_quantity_decrement_button = this.page.locator('minus');
         this.product_quantity_increment_button = this.page.locator('plus');
-        this.add_to_cart = this.page.getByRole("button",{name: "Add"});
+
         this.cart_detail = this.page.locator('.login-section .cart-btn > a');
         this.number_of_cart_items = this.page.locator('.cart-btn .cart-value')
 
@@ -68,9 +68,6 @@ export class Shop extends BasePage{
     return firstProductName.trim();
     }
 
-    async showCartDetail(){
-        await this.cart_detail.click();
-    }
 
     async browseCategory(category) {
 
