@@ -39,4 +39,14 @@ test.describe('Search Functionality Tests', () => {
     // Now do a numeric comparison:
     expect(matchesCount).toBeGreaterThan(0);
   })
+
+  test('Search returns "No Data Found" when no matching product exists', async ({ page }) => {
+    // Perform a search with a query that should return no results
+    await searchPage.searchProduct('xyznonexistentproduct');
+
+    await page.waitForLoadState('networkidle')
+
+    // Wait for the "No Data Found" message to be visible
+    await expect(page.getByText(/No Data Found/i)).toBeVisible();
+  });
 });
