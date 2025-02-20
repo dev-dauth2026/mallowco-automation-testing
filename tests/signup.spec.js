@@ -11,6 +11,8 @@ test.describe('User Sign up Test',()=>{
          // Navigate to the home page
          await signup.gotoHomePage();
          await signup.cookiesAccepted();
+         await signup.header.signupLink.click();
+         await page.waitForLoadState('networkidle');
       })
 
       test('Sign up test successfully', async({page})=>{
