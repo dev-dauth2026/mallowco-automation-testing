@@ -3,9 +3,9 @@ import { SearchPage } from '../pages/Search';
 import 'dotenv/config';
 
 test.describe('Search Functionality Tests', () => {
-  
+  let searchPage;
   test.beforeEach('Homa page',async ({page})=>{
-    const searchPage = new SearchPage(page);
+     searchPage = new SearchPage(page);
     // Go to homepage
     await searchPage.gotoHomePage();
 
@@ -14,7 +14,6 @@ test.describe('Search Functionality Tests', () => {
   })
 
   test('Search, select and detail page test', async ({ page }) => {
-    const searchPage = new SearchPage(page);
 
     // Perform search and select the first product and check the detail page title is same or not
     const selectedProduct = await searchPage.searchAndSelectFirstProduct('facewash');
@@ -24,7 +23,6 @@ test.describe('Search Functionality Tests', () => {
   });
 
   test('Search and match the search keywords', async({page})=>{
-    const searchPage = new SearchPage(page);
 
     // Perform another search
     await searchPage.searchProduct('men facewash');
