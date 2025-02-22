@@ -5,6 +5,16 @@ export class CartModal {
 
       this.cartItems = page.locator(".side-cart-items .cart-item");
       this.cartItemName = page.locator(".side-cart-items .cart-item  h4");
+      this.cartItemVendor = page.locator(".side-cart-items .cart-item strong");
+      this.cartItemSize = page.locator(".side-cart-items .cart-item pckt-select");
+      this.cartItemRemoveButton = page.locator('.js-remove-cart-item');
+      this.priceWithQuantity = page.locator('.qty-group');
+      this.totalCartItemsPrice = page.locator('..main-total-cart span');
+      this.checkoutButton = page.getByRole('link',{name:'Checkout'});
+      this.viewCartButton = page.getByRole('link',{name:'View Cart'});
+
+
+      //No products in cart
       this.noCartItemText = page.locator(".cart-text", { hasText: "You don't have any items in your cart." });
       this.cartStartShoppingbutton = page.locator(".carts-btn", { hasText: "Start Shopping" });
     }
