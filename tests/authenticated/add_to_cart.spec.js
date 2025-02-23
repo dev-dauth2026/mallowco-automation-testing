@@ -226,5 +226,21 @@ test.describe('Add to Cart testing ', ()=>{
 
     })
 
+    test("Should display 'You don't have any items in your cart.' if no item added to cart", async({page})=>{
+
+        const cartCount = parseInt(await homePage.header.cartCount.textContent()).trim();
+
+        await page.goto(env.process.TEST_URL+'cart');
+
+        const noCartItem =(await cartPage.noCartItem.textContent()).trim();
+        //if no item in the cart
+        if(cartCount==0){
+            expect(noCartItem).toBeVisible();
+        }else{
+            expect(noCartItem).toBeHidden();
+        }
+
+
+    })
 })
 
