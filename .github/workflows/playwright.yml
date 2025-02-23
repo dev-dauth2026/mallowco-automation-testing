@@ -37,11 +37,11 @@ jobs:
 
       - name: Validate Secrets (Without Printing)
         run: |
-          if [[ -z "${{ secrets.EMAIL }}" ]]; then echo "❌ EMAIL secret is missing!"; exit 1; fi
-          if [[ -z "${{ secrets.PASSWORD }}" ]]; then echo "❌ PASSWORD secret is missing!"; exit 1; fi
-          if [[ -z "${{ secrets.CONFIRM_PASSWORD }}" ]]; then echo "❌ CONFIRM_PASSWORD secret is missing!"; exit 1; fi
-          if [[ -z "${{ secrets.FIRSTNAME }}" ]]; then echo "❌ FIRSTNAME secret is missing!"; exit 1; fi
-          if [[ -z "${{ secrets.TEST_URL }}" ]]; then echo "❌ TEST_URL secret is missing!"; exit 1; fi
+          if [[ -z "${{ secrets.EMAIL }}" ]]; then echo "EMAIL secret is missing!"; exit 1; fi
+          if [[ -z "${{ secrets.PASSWORD }}" ]]; then echo "PASSWORD secret is missing!"; exit 1; fi
+          if [[ -z "${{ secrets.CONFIRM_PASSWORD }}" ]]; then echo "CONFIRM_PASSWORD secret is missing!"; exit 1; fi
+          if [[ -z "${{ secrets.FIRSTNAME }}" ]]; then echo "FIRSTNAME secret is missing!"; exit 1; fi
+          if [[ -z "${{ secrets.TEST_URL }}" ]]; then echo "TEST_URL secret is missing!"; exit 1; fi
         shell: bash
 
       - name: Create .env File
@@ -51,23 +51,30 @@ jobs:
           echo "PASSWORD=${{ secrets.PASSWORD }}" >> .env
           echo "CONFIRM_PASSWORD=${{ secrets.CONFIRM_PASSWORD }}" >> .env
           echo "FIRSTNAME=${{ secrets.FIRSTNAME }}" >> .env
-          # ADD THIS:
           echo "TEST_URL=${{ secrets.TEST_URL }}" >> .env
-          echo "✅ .env file created successfully."
+          echo " .env file created successfully."
         shell: bash
 
-      - name: Run Playwright Tests with Multiple Workers
-        env:
-          CI: true
-          EMAIL: ${{ secrets.EMAIL }}
-          PASSWORD: ${{ secrets.PASSWORD }}
-          CONFIRM_PASSWORD: ${{ secrets.CONFIRM_PASSWORD }}
-          FIRSTNAME: ${{ secrets.FIRSTNAME }}
-          # ADD THIS:
-          TEST_URL: ${{ secrets.TEST_URL }}
-        run: |
-          echo "🚀 Running Playwright tests with 2 workers..."
-          npx playwright test --workers=2 --reporter=dot,html
+      - name: Run Authentication Setup
+        run: npx playwright test tests/setup/auth.setup.js --project=setup
+
+      - name: Run Unauthenticated Tests (Chromium)
+        run: npx playwright test --project=unauthenticated-chromium
+
+      - name: Run Authenticated Tests (Chromium)
+        run: npx playwright test --project=authenticated-chromium
+
+      - name: Run Unauthenticated Tests (Firefox)
+        run: npx playwright test --project=unauthenticated-firefox
+
+      - name: Run Authenticated Tests (Firefox)
+        run: npx playwright test --project=authenticated-firefox
+
+      - name: Run Unauthenticated Tests (WebKit)
+        run: npx playwright test --project=unauthenticated-webkit
+
+      - name: Run Authenticated Tests (WebKit)
+        run: npx playwright test --project=authenticated-webkit
 
       - name: Upload Playwright Report
         if: always()

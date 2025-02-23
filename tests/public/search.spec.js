@@ -1,5 +1,5 @@
 import { test,expect } from '@playwright/test';
-import { SearchPage } from '../pages/Search';
+import { SearchPage } from '../../pages/Search';
 import 'dotenv/config';
 
 test.describe('Search Functionality Tests', () => {
