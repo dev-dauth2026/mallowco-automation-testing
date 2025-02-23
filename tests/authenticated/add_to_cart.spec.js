@@ -176,7 +176,7 @@ test.describe('Add to Cart testing ', ()=>{
         await cartPage.header.myCart.click();
         await expect(cartPage.cartModal.totalCartItemsPrice).toBeVisible();
 
-        const cartModalItemList = cartPage.cardModal.cartItems;
+        const cartModalItemList = cartPage.cartModal.cartItems;
         const cartPageItemList = cartPage.cartItems;
         const cartModalItemCount = await cartModalItemList.count();
         const cartPageItemCount = await cartPageItemList.count();
@@ -193,18 +193,18 @@ test.describe('Add to Cart testing ', ()=>{
                                                 .replace(/\s+/g, ' ')
                                                 .trim().split(" ");
             const cartModalItemQuantity = parseInt(cartModalItemQuantityGroup[0]);
-            const cartModalItemPrice = parseInt(cartModalItemQuantityGroup[1]);
-            const cartModalItemSize = await cartPage.cartModal.cartItemSize.textContent();
+            const cartModalItemPrice = parseFloat(cartModalItemQuantityGroup[1]);
+            const cartModalItemSize = (await cartPage.cartModal.cartItemSize.textContent())?.trim() ?? '';
 
             //Cart Page Item Values
             const cartPageItemName = (await cartPage.cartItemName.nth(i).textContent()).trim();
             const cartPageItemVendor = (await cartPage.cartItemVendor.nth(i).textContent()).trim();
             const cartPageItemQuantity = parseInt(await cartPage.cartItemQuantity.textContent());
-            const cartPageItemPrice = parseIn(await cartPage.priceWithQuantity.textContent())
+            const cartPageItemPrice = parseFloat(await cartPage.priceWithQuantity.textContent())
                                         .replace(/[^0-9. ]/g, '')
                                         .replace(/\s+/g, ' ')
                                         .trim();
-            const cartPageItemSize = await cartPage.cartItemSize.textContent();
+            const cartPageItemSize = (await cartPage.cartItemSize.textContent())?.trim() ?? '';
 
             // Checking values are same for each items in cart Modal and cart page
             expect(cartModalItemName).toBe(cartPageItemName);
