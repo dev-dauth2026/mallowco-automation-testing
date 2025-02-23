@@ -35,7 +35,7 @@ test.describe('Add to Cart testing ', ()=>{
     })
 
 
-    test('Should add item after only login from home page', async({page})=>{
+    test('Should add item after login when add to cart button clicked without logged in from home page', async({page})=>{
         // Reset storage state for this file to avoid being authenticated
         test.use({ storageState: { cookies: [], origins: [] } });
         let position = 1;
