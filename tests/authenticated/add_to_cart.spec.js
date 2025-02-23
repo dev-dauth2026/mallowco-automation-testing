@@ -64,12 +64,6 @@ test.describe('Add to Cart testing ', ()=>{
     })
 
     test('Should  bypass login and add item to cart', async ({ page }) => {
-
-        // Load pre-authenticated state from auth.json
-        const authState = require('../auth.json');
-        await context.addCookies(authState.cookies);
-
-        await page.waitForTimeout(5000);
     
         // Revisit the home page so that the authenticated state takes effect
         await homePage.gotoHomePage();
@@ -102,10 +96,6 @@ test.describe('Add to Cart testing ', ()=>{
       });
 
       test('Should navigate to Cart Page', async({page})=>{
-        // Load pre-authenticated state from auth.json
-        const authState = require('../auth.json');
-        await context.addCookies(authState.cookies);
-        await page.waitForTimeout(2000);
 
         // Revisit the home page so that the authenticated state takes effect
         await homePage.gotoHomePage();
@@ -121,10 +111,6 @@ test.describe('Add to Cart testing ', ()=>{
       })
 
       test('Cart items total price and totla price displayed should be equal or close', async({page})=>{
-         // Load pre-authenticated state from auth.json
-         const authState = require('../auth.json');
-         await context.addCookies(authState.cookies);
-         await page.waitForTimeout(2000);
 
          // Revisit the home page so that the authenticated state takes effect
         await homePage.gotoHomePage();
