@@ -12,6 +12,8 @@ export class CartModal {
       this.totalCartItemsPrice = page.locator('..main-total-cart span');
       this.checkoutButton = page.getByRole('link',{name:'Checkout'});
       this.viewCartButton = page.getByRole('link',{name:'View Cart'});
+      this.cartCloseButton = '.bs-canvas-close'
+
 
 
       //No products in cart
