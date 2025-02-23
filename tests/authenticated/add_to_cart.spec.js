@@ -73,7 +73,7 @@ test.describe('Add to Cart testing ', ()=>{
         const cartCountLocator = homePage.header.cartCount
         const cartCountBeforeAddToCart = parseInt(await cartCountLocator.textContent());
         // Now perform the add-to-cart action without being redirected to login
-        const productAddedToCartName = await homePage.productCard.addItemToCart(2);
+        const productAddedToCartName = await homePage.productCard.addItemToCart(position);
         await page.waitForTimeout(2000);
         const cartCountAfterAddToCart = parsenInt(await cartCountLocator.textContent());
 
@@ -166,10 +166,58 @@ test.describe('Add to Cart testing ', ()=>{
 
       })
 
+      test('Should contain same cart items in both Cart Modal and Cart Page', async ({page})=>{
+        
+        // Navigate to cart page directly
+        await page.goto(env.process.TEST_URL+'cart') ;
+        await page.waitForLoadState('networkidle');
+
+        // open cart modal
+        await cartPage.header.myCart.click();
+        await expect(cartPage.cartModal.totalCartItemsPrice).toBeVisible();
+
+        const cartModalItemList = cartPage.cardModal.cartItems;
+        const cartPageItemList = cartPage.cartItems;
+        const cartModalItemCount = await cartModalItemList.count();
+        const cartPageItemCount = await cartPageItemList.count();
+        
+        //Check item number are same in cart modal and cart page
+        expect(cartPageItemCount).toEqual(cartModalItemCount);
+
+        for (let i=0;i<cartModalItemCount; i++){
+            //Cart Modal Item Values
+            const cartModalItemName = (await cartPage.cartModal.cartItemName.nth(i).textContent()).trim();
+            const cartModalItemVendor = (await cartPage.cartModal.cartItemVendor.nth(i).textContent()).trim();
+            const cartModalItemQuantityGroup = (await cartPage.cartModal.priceWithQuantity.textContent())
+                                                .replace(/[^0-9. ]/g, '')
+                                                .replace(/\s+/g, ' ')
+                                                .trim().split(" ");
+            const cartModalItemQuantity = parseInt(cartModalItemQuantityGroup[0]);
+            const cartModalItemPrice = parseInt(cartModalItemQuantityGroup[1]);
+            const cartModalItemSize = await cartPage.cartModal.cartItemSize.textContent();
+
+            //Cart Page Item Values
+            const cartPageItemName = (await cartPage.cartItemName.nth(i).textContent()).trim();
+            const cartPageItemVendor = (await cartPage.cartItemVendor.nth(i).textContent()).trim();
+            const cartPageItemQuantity = parseInt(await cartPage.cartItemQuantity.textContent());
+            const cartPageItemPrice = parseIn(await cartPage.priceWithQuantity.textContent())
+                                        .replace(/[^0-9. ]/g, '')
+                                        .replace(/\s+/g, ' ')
+                                        .trim();
+            const cartPageItemSize = await cartPage.cartItemSize.textContent();
+
+            // Checking values are same for each items in cart Modal and cart page
+            expect(cartModalItemName).toBe(cartPageItemName);
+            expect(cartModalItemVendor).toBe(cartPageItemVendor);
+            expect(cartModalItemQuantity).toBe(cartPageItemQuantity);
+            expect(cartModalItemPrice).toBe(cartPageItemPrice);
+            expect(cartModalItemSize).toBe(cartPageItemSize);
 
 
-    
+        }
 
+
+      })
 
 })
 
