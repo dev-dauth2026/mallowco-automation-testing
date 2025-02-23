@@ -10,8 +10,8 @@ export class ProductCardComponent{
     }
 
      // Add Item to Cart for both Home Page and Shop Page product
-     async addItemToCart(){
-        const firstProductCard = await this.productCard.first();
+     async addItemToCart(position){
+        const firstProductCard = await this.productCard.nth(position);
         const firstProductName = await firstProductCard.locator(this.productName).textContent();
         const firstProductAddToCartButton = await firstProductCard.locator(this.addItemToCart)
         await firstProductAddToCartButton.click();

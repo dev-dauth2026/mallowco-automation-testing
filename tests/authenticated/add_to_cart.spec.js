@@ -38,8 +38,9 @@ test.describe('Add to Cart testing ', ()=>{
     test('Should add item after only login from home page', async({page})=>{
         // Reset storage state for this file to avoid being authenticated
         test.use({ storageState: { cookies: [], origins: [] } });
+        let position = 1;
 
-        const productAddedToCartName = await homePage.addItemToCart();
+        const productAddedToCartName = await homePage.productCard.addItemToCart(position);
 
         expect(page).toHaveURL(/login/);
         await page.waitForLoadState('networkidle');
@@ -64,9 +65,7 @@ test.describe('Add to Cart testing ', ()=>{
     })
 
     test('Should  bypass login and add item to cart', async ({ page }) => {
-    
-        // Revisit the home page so that the authenticated state takes effect
-        await homePage.gotoHomePage();
+        let position = 2;
 
         // Login successful verify
         await expect(page.getByRole('link',{name: `Welcome ${process.env.FIRSTNAME} `})).toBeVisible();
@@ -74,7 +73,7 @@ test.describe('Add to Cart testing ', ()=>{
         const cartCountLocator = homePage.header.cartCount
         const cartCountBeforeAddToCart = parseInt(await cartCountLocator.textContent());
         // Now perform the add-to-cart action without being redirected to login
-        const productAddedToCartName = await homePage.productCard.addItemToCart();
+        const productAddedToCartName = await homePage.productCard.addItemToCart(2);
         await page.waitForTimeout(2000);
         const cartCountAfterAddToCart = parsenInt(await cartCountLocator.textContent());
 
@@ -97,8 +96,6 @@ test.describe('Add to Cart testing ', ()=>{
 
       test('Should navigate to Cart Page', async({page})=>{
 
-        // Revisit the home page so that the authenticated state takes effect
-        await homePage.gotoHomePage();
         await homePage.header.showMyCartDetails();
         await expect(homePage.cartModal.totalCartItemsPrice).toBeVisible();
 
@@ -112,8 +109,6 @@ test.describe('Add to Cart testing ', ()=>{
 
       test('Cart items total price and totla price displayed should be equal or close', async({page})=>{
 
-         // Revisit the home page so that the authenticated state takes effect
-        await homePage.gotoHomePage();
         await homePage.header.showMyCartDetails();
         await expect(homePage.cartModal.totalCartItemsPrice).toBeVisible();
 
@@ -138,7 +133,36 @@ test.describe('Add to Cart testing ', ()=>{
         expect(totalPriceNumber).toBeCloseTo(totalCartItemsPriceAfterSum);
       })
 
-      test('Adding same cart item again only increases the the cart product quanityt not adding new product item', async({page})=>{
+      test('Should increase the quantity of the item while adding the item already existed on the cart', async({page})=>{
+        let position = 1;
+
+        const itemToBeAdded = (await homePage.productCard.productName.nth(position).textContent()).trim().toUpperCase();
+
+        await homePage.header.myCart.click();
+        await homePage.waitForProductNameInCart(itemToBeAdded);
+
+        const cartItemToBeAddedDiv = await homePage.productCard.productCard.filter({hasText:itemToBeAdded})
+        const quantityOfItemToBeAddedGroup = (await cartItemToBeAddedDiv.productQuantity.textContent())
+                                        .replace(/[^0-9. ]/g, '')
+                                        .replace(/\s+/g, ' ')
+                                        .trim().split(" ");
+        const numericQuantityOfItemToBeAdded = parseInt(quantityOfItemToBeAddedGroup[0])
+        await homePage.cartModal.cartCloseButton.click();
+
+        await homePage.productCard.addItemToCart(position);
+        await page.waitForLoadState('networkidle');
+
+        await homePage.header.myCart.click();
+        await homePage.waitForProductNameInCart(itemToBeAdded);
+
+        const quantityOfItemAfterAddedGroup = (await cartItemToBeAddedDiv.productQuantity.textContent())
+                                                .replace(/[^0-9. ]/g, '')
+                                                .replace(/\s+/g, ' ')
+                                                .trim().split(" ");
+        const numericQuantityAfterAdded = parseInt(quantityOfItemAfterAddedGroup[0])
+
+        // Quantity of the item added increased by 1
+        await expect(numericQuantityAfterAdded).toBe(numericQuantityOfItemToBeAdded+1);
 
       })
 
