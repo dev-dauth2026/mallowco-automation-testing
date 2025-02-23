@@ -6,7 +6,7 @@ export class CartModal {
       this.cartItems = page.locator(".side-cart-items .cart-item");
       this.cartItemName = page.locator(".side-cart-items .cart-item  h4");
       this.cartItemVendor = page.locator(".side-cart-items .cart-item strong");
-      this.cartItemSize = page.locator(".side-cart-items .cart-item pckt-select");
+      this.cartItemSize = page.locator(".side-cart-items .cart-item .pckt-select");
       this.cartItemRemoveButton = page.locator('.js-remove-cart-item');
       this.priceWithQuantity = page.locator('.qty-group');
       this.totalCartItemsPrice = page.locator('..main-total-cart span');
