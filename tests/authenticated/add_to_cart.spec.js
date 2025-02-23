@@ -51,7 +51,7 @@ test.describe('Add to Cart testing ', ()=>{
         await page.waitForLoadState('networkidle');
         
         // Save the authenticated state to auth.json
-        await context.storageState({ path: 'auth.json' });
+        await context.storageState({ path: authFile });
         
         await homePage.header.showMyCartDetails();
         await homePage.waitForProductNameInCart(productAddedToCartName);
@@ -64,37 +64,46 @@ test.describe('Add to Cart testing ', ()=>{
         
     })
 
-    test('Should  bypass login and add item to cart', async ({ page }) => {
+    test('Should  bypass login and add item to cart and quantity number should increased by 1 not existed in the cart', async ({ page }) => {
         let position = 2;
+        let isProductInCart;
 
         // Login successful verify
         await expect(page.getByRole('link',{name: `Welcome ${process.env.FIRSTNAME} `})).toBeVisible();
 
-        const cartCountLocator = homePage.header.cartCount
+        const cartCountLocator = homePage.header.cartCount;
         const cartCountBeforeAddToCart = parseInt(await cartCountLocator.textContent());
-        // Now perform the add-to-cart action without being redirected to login
-        const productAddedToCartName = await homePage.productCard.addItemToCart(position);
-        await page.waitForTimeout(2000);
-        const cartCountAfterAddToCart = parsenInt(await cartCountLocator.textContent());
+        const productSelectedToAddToCartName = (await homePage.productCard.productName.nth(position).textContent()).trim();
 
-        // Validate that we're not redirected to the login page
-        await expect(page).not.toHaveURL(/login/);
-        // Cart value increment assertion
-        await expect(cartCountAfterAddToCart).toBe(cartCountBeforeAddToCart + 1);
-        
         await homePage.header.showMyCartDetails();
         await expect(homePage.cartModal.totalCartItemsPrice).toBeVisible();
-    
-        await homePage.waitForProductNameInCart(productAddedToCartName);
-    
-        const cartItemNameList = homePage.cartModal.cartItemName;
-        const cartItemsCount = await homePage.cartModal.cartItemNameList.count();
-        const cartItemInCart = cartItemNameList.nth(cartItemsCount - 1);
-        //Assert last item of the cart is the added cart item previously
-        await expect(cartItemInCart).toContainText(productAddedToCartName);
+
+        //Check whether there is any item in the cart
+        if(cartCountBeforeAddToCart>0){
+            for(let i=0;i<cartCountBeforeAddToCart;i++){
+                const cartItemName = (await homePage.cartModal.cartItemName.nth(i).textContent()).trim();
+                (cartItemName == productSelectedToAddToCartName)?isProductInCart=true:false;
+            }
+        }else{
+            isProductInCart = false;
+        }
+        // Now perform the add-to-cart action without being redirected to login
+        await homePage.productCard.addItemToCart(position);
+        await homePage.waitForProductNameInCart(productSelectedToAddToCartName);
+         // Validate that we're not redirected to the login page
+        await expect(page).not.toHaveURL(/login/);
+
+        const cartCountAfterAddToCart = parsenInt(await cartCountLocator.textContent());
+
+        //If the product is already in the cart and validate the increment of cart item accordingly
+       (isProductInCart==true)? await expect(cartCountAfterAddToCart).toBe(cartCountBeforeAddToCart): 
+                                await expect(cartCountAfterAddToCart).toBe(cartCountBeforeAddToCart + 1)
+
+        
+        await expect(homePage.cartModal.totalCartItemsPrice).toBeVisible();
       });
 
-      test('Should navigate to Cart Page', async({page})=>{
+    test('Should navigate to Cart Page', async({page})=>{
 
         await homePage.header.showMyCartDetails();
         await expect(homePage.cartModal.totalCartItemsPrice).toBeVisible();
@@ -103,11 +112,9 @@ test.describe('Add to Cart testing ', ()=>{
         await page.waitForLoadState('networkidle');
         // Navigation to Cart Page assertion
         expect(page).toHaveURL(/cart/);
+    })
 
-
-      })
-
-      test('Cart items total price and totla price displayed should be equal or close', async({page})=>{
+    test('Cart items total price and totla price displayed should be equal or close', async({page})=>{
 
         await homePage.header.showMyCartDetails();
         await expect(homePage.cartModal.totalCartItemsPrice).toBeVisible();
@@ -131,9 +138,9 @@ test.describe('Add to Cart testing ', ()=>{
 
         // Total price of cart items assertion
         expect(totalPriceNumber).toBeCloseTo(totalCartItemsPriceAfterSum);
-      })
+    })
 
-      test('Should increase the quantity of the item while adding the item already existed on the cart', async({page})=>{
+    test('Should increase the quantity of the item while adding the item already existed on the cart', async({page})=>{
         let position = 1;
 
         const itemToBeAdded = (await homePage.productCard.productName.nth(position).textContent()).trim().toUpperCase();
@@ -164,10 +171,10 @@ test.describe('Add to Cart testing ', ()=>{
         // Quantity of the item added increased by 1
         await expect(numericQuantityAfterAdded).toBe(numericQuantityOfItemToBeAdded+1);
 
-      })
+    })
 
-      test('Should contain same cart items in both Cart Modal and Cart Page', async ({page})=>{
-        
+    test('Should contain same cart items in both Cart Modal and Cart Page', async ({page})=>{
+    
         // Navigate to cart page directly
         await page.goto(env.process.TEST_URL+'cart') ;
         await page.waitForLoadState('networkidle');
@@ -217,7 +224,7 @@ test.describe('Add to Cart testing ', ()=>{
         }
 
 
-      })
+    })
 
 })
 
