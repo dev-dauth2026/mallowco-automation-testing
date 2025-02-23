@@ -19,6 +19,9 @@ export class Cart extends BasePage {
     this.totalCartItemsPrice = page.locator('.total span');
     this.checkoutButton = page.getByRole('link',{name:'Proceed to Checkout'});
 
+    // No Cart Item
+    this.noCartItem = page.locator('.cards .no-result h3');
+
   }
 
 
