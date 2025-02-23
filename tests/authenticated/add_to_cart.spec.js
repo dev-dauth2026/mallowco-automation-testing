@@ -5,6 +5,7 @@ import { Login } from "../../pages/Login";
 import { Shop } from "../../pages/Shop";
 import { Cart } from "../../pages/Cart";
 import 'dotenv/config';
+import { authFile } from "../setup/auth.setup";
 
 test.describe('Add to Cart testing ', ()=>{
     let homePage;
@@ -22,9 +23,6 @@ test.describe('Add to Cart testing ', ()=>{
 
     })
 
-    test.beforeEach('Login ByPass', async ({page})=>{
-        
-    })
 
     test('Should display Cart Modal  from home page', async({page})=>{
         await homePage.header.myCart.click();
@@ -38,6 +36,8 @@ test.describe('Add to Cart testing ', ()=>{
 
 
     test('Should add item after only login from home page', async({page})=>{
+        // Reset storage state for this file to avoid being authenticated
+        test.use({ storageState: { cookies: [], origins: [] } });
 
         const productAddedToCartName = await homePage.addItemToCart();
 
