@@ -232,29 +232,26 @@ test.describe('Add to Cart testing ', ()=>{
 
         // Navigate to Cart Page
         await cartPage.goToCart();
-        
-        // selected product and product quantity in the cart page for the test
-        const selectedCartProduct = await cartPage.cartItemName.nth(cartProductProductPostition).textContent();
-        const initialProductPrice = getNumericPriceValue(await cartPage.cartItemPrice.nth(cartProductProductPostition).textContent())                
-        const initialSelectedCartProductQuantity = parseInt(await cartPage.cartItemQuantity.nth(cartProductProductPostition).inputValue());
-        const initialTotalPrice= getNumericPriceValue(await cartPage.totalCartItemsPrice.textContent());
-        // increment button clicked
-        await cartPage.quantityIncrementButton.nth(cartProductProductPostition).click();
-        await expect(cartPage.cartItemQuantity.nth(cartProductPosition)).toHaveValue(String(initialSelectedCartProductQuantity + 1));
 
-        const cartProductQuantityAfterIncrement = parseInt(await cartPage.cartItemQuantity.nth(cartProductProductPostition).inputValue())
-        const totalPriceAfterIncrement = getNumericPriceValue(await cartPage.totalCartItemsPrice.textContent());
-        expect(cartProductQuantityAfterIncrement).toBe(initialSelectedCartProductQuantity+1);
-        expect(totalPriceAfterIncrement).toBe(initialTotalPrice + initialProductPrice);
+        // Get initial product details
+        const initialProduct = await cartPage.getCartProductDetails(cartProductPosition);
+        const initialTotalPrice = await cartPage.getTotalPrice();
 
-        // decrement button clicked
-        await cartPage.quantityDecrementButton.nth(cartProductProductPostition).click();
-        await expect(cartPage.cartItemQuantity.nth(cartProductPosition)).toHaveValue(String(initialSelectedCartProductQuantity));
+        // Increment Quantity
+        await cartPage.incrementQuantity(cartProductPosition);
+        await expect(cartPage.cartItemQuantity.nth(cartProductPosition)).toHaveValue(String(initialProduct.quantity + 1));
 
-        const cartProductQuantityAfterDecrement = parseInt(await cartPage.cartItemQuantity.nth(cartProductProductPostition).inputValue())
-        const totalPriceAfterDecrement = getNumericPriceValue(await cartPage.totalCartItemsPrice.textContent());
-        expect(cartProductQuantityAfterDecrement).toBe(cartProductQuantityAfterIncrement-1);
-        expect(totalPriceAfterDecrement).toBe(totalPriceAfterIncrement - initialProductPrice)
+        // Validate total price update
+        const totalPriceAfterIncrement = await cartPage.getTotalPrice();
+        expect(totalPriceAfterIncrement).toBe(initialTotalPrice + initialProduct.price);
+
+        // Decrement Quantity
+        await cartPage.decrementQuantity(cartProductPosition);
+        await expect(cartPage.cartItemQuantity.nth(cartProductPosition)).toHaveValue(String(initialProduct.quantity));
+
+        // Validate total price update
+        const totalPriceAfterDecrement = await cartPage.getTotalPrice();
+        expect(totalPriceAfterDecrement).toBe(initialTotalPrice);
 
     })
 

@@ -24,5 +24,30 @@ export class Cart extends BasePage {
 
   }
 
+  async goToCart() {
+    await this.page.goto(process.env.TEST_URL + 'cart');
+    await this.page.waitForLoadState('networkidle');
+}
+
+async getCartProductDetails(position) {
+  return {
+      name: await this.cartItemName.nth(position).textContent(),
+      price: await getNumericValue(this.cartItemPrice.nth(position)),
+      quantity: parseInt(await this.cartItemQuantity.nth(position).inputValue()),
+  };
+}
+
+async incrementQuantity(position) {
+  await this.quantityIncrementButton.nth(position).click();
+}
+
+async decrementQuantity(position) {
+  await this.quantityDecrementButton.nth(position).click();
+}
+
+async getTotalPrice() {
+  return await getNumericValue(this.totalCartItemsPrice);
+}
+
 
 };
