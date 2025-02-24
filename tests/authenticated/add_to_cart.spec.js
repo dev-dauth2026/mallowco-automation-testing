@@ -6,6 +6,7 @@ import { Shop } from "../../pages/Shop";
 import { Cart } from "../../pages/Cart";
 import 'dotenv/config';
 import { authFile } from "../setup/auth.setup";
+import { getNumericPriceValue } from "../../pages/utils/numericPriceUtil";
 
 test.describe('Add to Cart testing ', ()=>{
     let homePage;
@@ -224,6 +225,41 @@ test.describe('Add to Cart testing ', ()=>{
         }
 
 
+    })
+
+    test('Should be able to increase or decrease the cart item quantity and total price change in the cart page', async({page})=>{
+        let cartProductProductPostition = 1;
+
+        // Navigate to Cart Page
+        await cartPage.goToCart();
+        
+        // selected product and product quantity in the cart page for the test
+        const selectedCartProduct = await cartPage.cartItemName.nth(cartProductProductPostition).textContent();
+        const initialProductPrice = getNumericPriceValue(await cartPage.cartItemPrice.nth(cartProductProductPostition).textContent())                
+        const initialSelectedCartProductQuantity = parseInt(await cartPage.cartItemQuantity.nth(cartProductProductPostition).inputValue());
+        const initialTotalPrice= getNumericPriceValue(await cartPage.totalCartItemsPrice.textContent());
+        // increment button clicked
+        await cartPage.quantityIncrementButton.nth(cartProductProductPostition).click();
+        await expect(cartPage.cartItemQuantity.nth(cartProductPosition)).toHaveValue(String(initialSelectedCartProductQuantity + 1));
+
+        const cartProductQuantityAfterIncrement = parseInt(await cartPage.cartItemQuantity.nth(cartProductProductPostition).inputValue())
+        const totalPriceAfterIncrement = getNumericPriceValue(await cartPage.totalCartItemsPrice.textContent());
+        expect(cartProductQuantityAfterIncrement).toBe(initialSelectedCartProductQuantity+1);
+        expect(totalPriceAfterIncrement).toBe(initialTotalPrice + initialProductPrice);
+
+        // decrement button clicked
+        await cartPage.quantityDecrementButton.nth(cartProductProductPostition).click();
+        await expect(cartPage.cartItemQuantity.nth(cartProductPosition)).toHaveValue(String(initialSelectedCartProductQuantity));
+
+        const cartProductQuantityAfterDecrement = parseInt(await cartPage.cartItemQuantity.nth(cartProductProductPostition).inputValue())
+        const totalPriceAfterDecrement = getNumericPriceValue(await cartPage.totalCartItemsPrice.textContent());
+        expect(cartProductQuantityAfterDecrement).toBe(cartProductQuantityAfterIncrement-1);
+        expect(totalPriceAfterDecrement).toBe(totalPriceAfterIncrement - initialProductPrice)
+
+    })
+
+    test('Should be able to remove the cart item ', async({page})=>{
+        
     })
 
     test("Should display 'You don't have any items in your cart.' if no item added to cart", async({page})=>{
