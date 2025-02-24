@@ -92,8 +92,8 @@ export class HeaderComponent {
     }
 
     async getCartCount() {
-        const countElement = this.page.locator(this.cartCount);
-        return await countElement.textContent();
+        const cartCount = parseInt((await this.cartCount.textContent()).trim());
+        return cartCount;
     }
 
     // User account related methods

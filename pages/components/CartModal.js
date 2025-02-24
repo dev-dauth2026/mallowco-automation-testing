@@ -1,3 +1,5 @@
+import { getNumericPriceValue, getNumericQuantityAndPriceValue } from "../utils/numericPriceUtil";
+
 // Cart.js
 export class CartModal {
     constructor(page) {
@@ -21,6 +23,19 @@ export class CartModal {
       this.cartStartShoppingbutton = page.locator(".carts-btn", { hasText: "Start Shopping" });
     }
 
+    async getCartModalProductDetails(position) {
+      return {
+          name: await this.cartItemName.nth(position).textContent(),
+          price: await getNumericQuantityAndPriceValue(this.priceWithQuantity.nth(position).textContent()).price,
+          quantity: await getNumericQuantityAndPriceValue(this.priceWithQuantity.nth(position).textContent()).quantity,
+      };
+    }
+
+    async removeCartModalItem(position,selectedProductName){
+      await this.cartItemRemoveButton.nth(position).click()
+      await expect(selectedProductName).toBeHidden();
+    }
+
     async waitForProductNameInCart(name) {
         const itemLocator = this.page.locator(`.side-cart-items .cart-item h4:text("${name}")`);
         await itemLocator.waitFor({ state: "visible" });
@@ -34,6 +49,11 @@ export class CartModal {
         const lastCartItem = (await this.cartItemName.last().textContent()).trim();
 
       return lastCartItem;
+    }
+
+    async closeCartModal(){
+      await this.cartCloseButton.click();
+      await this.page.waitForTimeout(2000);
     }
 };
   

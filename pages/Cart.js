@@ -50,5 +50,10 @@ async getTotalPrice() {
   return await getNumericPriceValue(this.totalCartItemsPrice);
 }
 
+async removeCartItem(position,selectedProductName){
+  await this.cartItemRemoveButton.nth(position).click();
+  await expect(selectedProductName).toBeHidden();
+}
+
 
 };
