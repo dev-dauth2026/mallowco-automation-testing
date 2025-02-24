@@ -228,7 +228,7 @@ test.describe('Add to Cart testing ', ()=>{
     })
 
     test('Should be able to increase or decrease the cart item quantity and total price change in the cart page', async({page})=>{
-        let cartProductProductPostition = 1;
+        let cartProductPosition = 1;
 
         // Navigate to Cart Page
         await cartPage.goToCart();
