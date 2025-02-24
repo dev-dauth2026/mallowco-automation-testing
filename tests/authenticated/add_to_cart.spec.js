@@ -6,6 +6,7 @@ import { Shop } from "../../pages/Shop";
 import { Cart } from "../../pages/Cart";
 import 'dotenv/config';
 import { authFile } from "../setup/auth.setup";
+import { getNumericPriceValue } from "../../pages/utils/numericPriceUtil";
 
 
 test.describe('Add to Cart testing ', ()=>{
@@ -134,8 +135,7 @@ test.describe('Add to Cart testing ', ()=>{
             totalCartItemsPriceAfterSum += itemQuantity * itemPrice;
         } 
 
-        const totalPriceInCartDisplayed = (await homePage.cartModal.totalCartItemsPrice.textContent()).trim();
-        const totalPriceNumber = parseFloat(totalPriceInCartDisplayed.replace(/[^0-9.]/g, ''));
+        const totalPriceNumber = getNumericPriceValue(await homePage.cartModal.totalCartItemsPrice.textContent());
 
         // Total price of cart items assertion
         expect(totalPriceNumber).toBeCloseTo(totalCartItemsPriceAfterSum);
