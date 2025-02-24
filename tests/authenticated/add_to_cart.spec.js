@@ -262,7 +262,7 @@ test.describe('Add to Cart testing ', ()=>{
         // Navigate to Cart Page
         await cartPage.goToCart();
 
-        initialCartItemCount = cartPage.header.getCartCount();
+        initialCartItemCount = await cartPage.header.getCartCount();
         
         //Remove item from cart modal
         await cartPage.header.showMyCartDetails();
@@ -272,7 +272,7 @@ test.describe('Add to Cart testing ', ()=>{
             const selectedProductName = await cartPage.cartModal.getCartModalProductDetails(cartProductPosition).name;
             await cartPage.cartModal.removeCartModalItem(cartProductPosition,selectedProductName );
 
-            cartItemCount = cartPage.header.getCartCount();
+            cartItemCount = await cartPage.header.getCartCount();
             
             if(cartItemCount>0){
                 expect (cartItemCount).toBe(initialCartItemCount-1)
@@ -293,12 +293,12 @@ test.describe('Add to Cart testing ', ()=>{
             const selectedProductName = await cartPage.getCartProductDetails(cartProductPosition).name;
             await cartPage.removeCartItem(cartProductPosition,selectedProductName);
 
-            let cartItemCountAfterRemove = cartPage.header.getCartCount();
+            let cartItemCountAfterRemove = await cartPage.header.getCartCount();
 
             if(cartItemCount>0){
                 expect (cartItemCountAfterRemove).toBe(cartItemCount-1)
             }else{
-                expect(cartPage.header.getCartCount()).toBeHidden();
+                expect(await cartPage.header.getCartCount()).toBeHidden();
                 expect(await cartPage.cartModal.noCartItemText.textContent()).toBeVisible();
             }
 
