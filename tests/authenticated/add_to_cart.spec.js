@@ -6,7 +6,7 @@ import { Shop } from "../../pages/Shop";
 import { Cart } from "../../pages/Cart";
 import 'dotenv/config';
 import { authFile } from "../setup/auth.setup";
-import { getNumericPriceValue } from "../../pages/utils/numericPriceUtil";
+
 
 test.describe('Add to Cart testing ', ()=>{
     let homePage;

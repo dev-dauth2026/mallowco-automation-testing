@@ -1,4 +1,5 @@
 import { BasePage } from "./BasePage";
+import { getNumericPriceValue } from "../../pages/utils/numericPriceUtil";
 
 export class Cart extends BasePage {
   constructor(page) {
@@ -32,7 +33,7 @@ export class Cart extends BasePage {
 async getCartProductDetails(position) {
   return {
       name: await this.cartItemName.nth(position).textContent(),
-      price: await getNumericValue(this.cartItemPrice.nth(position)),
+      price: await getNumericPriceValue(this.cartItemPrice.nth(position)),
       quantity: parseInt(await this.cartItemQuantity.nth(position).inputValue()),
   };
 }
@@ -46,7 +47,7 @@ async decrementQuantity(position) {
 }
 
 async getTotalPrice() {
-  return await getNumericValue(this.totalCartItemsPrice);
+  return await getNumericPriceValue(this.totalCartItemsPrice);
 }
 
 
