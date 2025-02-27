@@ -1,4 +1,5 @@
 import { BasePage } from "./BasePage";
+import { selectDropdownAddress } from "./utils/selectDropdownAddress";
 
 export class CheckoutPage extends BasePage{
     constructor(page){
@@ -15,7 +16,11 @@ export class CheckoutPage extends BasePage{
         this.lastName = page.locator('#last_name');
         this.phoneNumber = page.locator('#phone_number');
         this.companyName = page.locator('#company_name');
+
         this.fullAddress = page.locator('#full_address');
+        // Dropdown options for address auto-fill
+        this.dropdownOptions = page.locator('.pac-item');
+
         this.streetAddress = page.locator('#street_address');
         this.unit = page.locator('#unit');
         this.city = page.locator('#city');
@@ -47,10 +52,48 @@ export class CheckoutPage extends BasePage{
         await this.page.waitForLoadState('networkidle');
     }
 
-    async verifyPreFilledBillingDetails(expectedData) {
-        await expect(this.locators.billingFirstName).toHaveValue(expectedData.firstName);
-        await expect(this.locators.billingLastName).toHaveValue(expectedData.lastName);
-        await expect(this.locators.billingPhoneNumber).toHaveValue(expectedData.phoneNumber);
-        await expect(this.locators.billingFullAddress).toHaveValue(expectedData.fullAddress);
+    async getPreFilledBillingDetails() {
+
+        return {
+            fullNamae: await this.fullName.inputValue(),
+            phoneNumber: await this.phoneNumber.inputValue(),
+            companyName: await this.companyName.inputValue(),
+            fullAddress: await this.fullAddress.inputValue(),
+            expectedAutoFill:{
+                streetAddress: await this.streetAddress.inputValue(),
+                unit: await this.unit.inputValue(),
+                city: await this.city.inputValue(),
+                suburb: await this.suburb.inputValue(),
+                state: await this.state.inputValue(),
+                country: await this.country.inputValue(),
+                postcode: await this.postcode.inputValue()
+            }
+        }
+    }
+
+    async fillShippingDetails(newShippingDetails) {
+        await this.firstName.fill(newShippingDetails.firstName);
+        await this.lastName.fill(newShippingDetails.lastName);
+        await this.phoneNumber.fill(newShippingDetails.phone);
+        await this.fullAddress.fill(newShippingDetails.fullAddress);
+
+        // Ensure the correct address option appears and select it
+        const dropdownOptions = await this.dropdownOptions.allTextContents();
+        await selectDropdownAddress(dropdownOptions, newDetails);
+    }
+
+    async proceedToNextStep() {
+        await this.nextButton.click();
+        await this.page.waitForLoadState('networkidle');
+    }
+
+    async applyCouponCode(couponCode) {
+        await this.couponInput.fill(couponCode);
+        await this.applyCouponButton.click();
+        await this.page.waitForLoadState('networkidle');
+    }
+
+    async getTotalAmount() {
+        return  parseFloat((await this.totalAmount.textContent()).trim());
     }
 }
