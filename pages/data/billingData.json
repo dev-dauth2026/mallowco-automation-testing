@@ -1,0 +1,42 @@
+{
+    "actualBillingAddress": {
+        "phoneNumber":"0404204204",
+        
+        "addressInput": "21 Harbour Street Woll",
+        "expectedAutoFill": {
+            "streetAddress": "21 Harbour Street",
+            "city": "Wollongong City Council",
+            "suburb": "Wollongong",
+            "state": "New South Wales",
+            "country": "Australia",
+            "postcode": "2500"
+        }
+    },
+    "changeBillingAddress": {
+        "phoneNumber":"0404204202",
+
+        "addressInput": "21 Harbour Street mosman",
+        "expectedAutoFill": {
+            "streetAddress": "21 Harbour Street",
+            "city": "Mosman Municipal Council",
+            "suburb": "Mosman",
+            "state": "New South Wales",
+            "country": "Australia",
+            "postcode": "2088"
+        }
+    },
+    "differentShippingAddres": {
+        "phoneNumber":"0404204200",
+
+        "addressInput": "65 Franz Road Clayfield",
+        "expectedAutoFill": {
+            "streetAddress": "65 Franz Road",
+            "city": "Brisbane City",
+            "suburb": "Clayfield",
+            "state": "Queensland",
+            "country": "Australia",
+            "postcode": "4011"
+        }
+    }
+
+}
