@@ -51,6 +51,10 @@ export class CartModal {
       return lastCartItem;
     }
 
+    async getTotalCartModalAmount(){
+      return  getNumericPriceValue( await this.totalCartItemsPrice.textContent());
+    }
+
     async closeCartModal(){
       await this.cartCloseButton.click();
       await this.page.waitForTimeout(2000);
