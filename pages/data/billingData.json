@@ -13,6 +13,8 @@
         }
     },
     "changeBillingAddress": {
+        "firstName": "John",
+        "lastName": "Doe",
         "phoneNumber":"0404204202",
 
         "addressInput": "21 Harbour Street mosman",
@@ -25,7 +27,7 @@
             "postcode": "2088"
         }
     },
-    "differentShippingAddres": {
+    "differentShippingAddress": {
         "phoneNumber":"0404204200",
 
         "addressInput": "65 Franz Road Clayfield",
@@ -37,6 +39,44 @@
             "country": "Australia",
             "postcode": "4011"
         }
+    },
+    "invalidePhoneNumberBillingDetail":{
+        "phoneNumber":"0404",
+
+        "addressInput": "65 Franz Road Clayfield",
+        "expectedAutoFill": {
+            "streetAddress": "65 Franz Road",
+            "city": "Brisbane City",
+            "suburb": "Clayfield",
+            "state": "Queensland",
+            "country": "Australia",
+            "postcode": "4011"
+        }
+    },
+    "missingBillingAddress":{
+        "phoneNumber":"0404204200",
+
+        "addressInput": "",
+        "expectedAutoFill": {
+            "streetAddress": "65 Franz Road",
+            "city": "Brisbane City",
+            "suburb": "Clayfield",
+            "state": "Queensland",
+            "country": "Australia",
+            "postcode": "4011"
+        }
+    },
+    "couponCode": {
+        "couponCode": "TESTCOUPON",
+        "expectedDiscount": "10%"
+    },
+    "invalidCouponCode": {
+        "couponCode": "INVALIDCOUPON",
+        "expectedDiscount": "0%"
+    },
+    "missingCouponCode": {
+        "couponCode": "",
+        "expectedDiscount": "0%"
     }
 
 }
